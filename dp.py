@@ -117,6 +117,26 @@ class Solution:
         print(dp)
         return max_value
 
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        # 判断第j个字符是否在dp[i-1]的区间之内 https://leetcode.cn/problems/longest-substring-without-repeating-characters/submissions/
+        n = len(s)
+        if n <= 1:
+            return n
+        ans = 0
+        dp = [0] * n
+        dp[0] = 1
+        for i in range(n):
+            j = i - 1
+            while j >= 0 and s[i] != s[j]:
+                j -= 1
+                # 判断第j个字符是否在dp[i-1]的区间之内
+            if i - j > dp[i - 1]:
+                dp[i] = dp[i - 1] + 1
+            else:
+                dp[i] = i - j
+            ans = max(ans, dp[i])
+        return ans
+
     def isSubsequence(self, s: str, t: str) -> bool:
         """
           依赖下方，因为s在t里面，与s和t公共子序列不同
