@@ -147,6 +147,37 @@ def maximumAverageSubtree(self, root):
     return self.res
 
 
+def reverseString(self, s: List[str]) -> None:
+    """
+    Do not return anything, modify s in-place instead.
+    """
+    l, r = 0, len(s) - 1
+    while l < r:
+        s[l], s[r] = s[r], s[l]
+        l += 1
+        r -= 1
+
+
+def expandAroundCenter(self, s, left, right):
+    while left >= 0 and right < len(s) and s[left] == s[right]:
+        left -= 1
+        right += 1
+    return left + 1, right - 1
+
+
+# https://leetcode.cn/problems/longest-palindromic-substring/solution/zui-chang-hui-wen-zi-chuan-by-leetcode-solution/
+def longestPalindrome(self, s: str) -> str:
+    start, end = 0, 0
+    for i in range(len(s)):
+        left1, right1 = self.expandAroundCenter(s, i, i)
+        left2, right2 = self.expandAroundCenter(s, i, i + 1)
+        if right1 - left1 > end - start:
+            start, end = left1, right1
+        if right2 - left2 > end - start:
+            start, end = left2, right2
+    return s[start: end + 1]
+
+
 class Solution:
     def rob(self, root: TreeNode) -> int:
         result = self.rob_tree(root)

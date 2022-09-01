@@ -1,3 +1,5 @@
+from bisect import bisect
+from random import random
 from typing import List
 
 
@@ -70,5 +72,18 @@ class NumMatrix:
                 tmp.append(q)
             res.append(tmp)
         return res
+
+
+class Solution:
+
+    def __init__(self, w: List[int]):
+        self.pre = [0]
+        for num in w:
+            self.pre.append(self.pre[-1]+num)
+
+
+    def pickIndex(self) -> int:
+        k = random.randint(1, self.pre[-1])
+        return bisect.bisect_left(self.pre, k) - 1
 
 

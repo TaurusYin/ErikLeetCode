@@ -58,6 +58,8 @@ class Solution:
             cnt = sl.bisect_left(insert_value)  # 找到右边比当前值小的元素个数
             ans += cnt  # 记入答案
             sl.add(nums[i])  # 将当前值加入有序数组中
+            
+
 
         return ans
 
