@@ -70,6 +70,9 @@ __allPathsSourceTarget(graph)
 
 
 # https://leetcode.cn/problems/course-schedule/
+"""
+O(m+n)
+"""
 def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
     # 先根据依赖关系建图
     graph = [[] for _ in range(numCourses)]
