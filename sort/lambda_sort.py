@@ -1,3 +1,6 @@
+# envelopes = sorted(envelopes, key=lambda x: (x[0], -x[1]))
+
+
 arr = [[1, 2, 3], [3, 2, 1], [4, 2, 1], [6, 4, 3]]
 indices = [[2, 0], [0, 1]]
 def custom_sort(x):

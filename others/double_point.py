@@ -2,6 +2,23 @@
 from typing import List
 
 
+"""
+初始化： 双指针 ii , jj 分列水槽左右两端；循环收窄： 直至双指针相遇时跳出；更新面积最大值 resres ；
+选定两板高度中的短板，向中间收窄一格；返回值： 返回面积最大值 resres 即可；
+链接：https://leetcode.cn/problems/container-with-most-water/solution/container-with-most-water-shuang-zhi-zhen-fa-yi-do/
+"""
+def maxArea(self, height: List[int]) -> int:
+    i, j, res = 0, len(height) - 1, 0
+    while i < j:
+        if height[i] < height[j]:
+            res = max(res, height[i] * (j - i))
+            i += 1
+        else:
+            res = max(res, height[j] * (j - i))
+            j -= 1
+    return res
+
+
 # https://leetcode.cn/problems/remove-duplicates-from-sorted-array/
 def removeDuplicates(self, nums):
     """

@@ -20,6 +20,11 @@ class Solution:
             dp[i + 1][2] = costs[i+1][2] + min(dp[i][0], dp[i][1])
         return min(dp[-1])
 
+
+    """
+    https://leetcode.cn/problems/russian-doll-envelopes/
+    请计算 最多能有多少个 信封能组成一组“俄罗斯套娃”信封（即可以把一个信封放到另一个信封里面。
+    """
     def maxEnvelopes(self, envelopes: List[List[int]]) -> int:
         # 基于w升序，h降序排序
         envelopes = sorted(envelopes, key=lambda x: (x[0], -x[1]))

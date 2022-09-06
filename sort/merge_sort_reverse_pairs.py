@@ -1,7 +1,8 @@
 from typing import List
 
-
 # https://leetcode.cn/problems/shu-zu-zhong-de-ni-xu-dui-lcof/solution/4chong-jie-fa-yi-wang-da-jin-you-xu-shu-0nia5/
+from sortedcontainers import SortedList
+
 
 class Solution:
     def __init__(self):
@@ -54,14 +55,23 @@ class Solution:
         sl = SortedList()
         ans = 0
         for i in range(n - 1, -1, -1):
-            insert_value = nums[i]# 反向遍历
+            insert_value = nums[i]  # 反向遍历
             cnt = sl.bisect_left(insert_value)  # 找到右边比当前值小的元素个数
             ans += cnt  # 记入答案
             sl.add(nums[i])  # 将当前值加入有序数组中
-            
-
-
         return ans
+
+    """
+    给你一个整数数组 nums ，按要求返回一个新数组 counts 。数组 counts 有该性质： counts[i] 的值是  nums[i] 右侧小于 nums[i] 的元素的数量。
+链接：https://leetcode.cn/problems/count-of-smaller-numbers-after-self
+    """
+    def countSmaller(self, nums: List[int]) -> List[int]:
+        lst = SortedList()
+        n = len(nums)
+        for i in range(n - 1, -1, -1):
+            lst.add(nums[i]) # 从小到大，找左边小的
+            nums[i] = lst.bisect_left(nums[i])
+        return nums
 
 
 if __name__ == '__main__':

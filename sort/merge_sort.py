@@ -1,3 +1,6 @@
+from typing import List
+
+
 def merge_sort(nums, low, high):
     if low == high:
         return
@@ -25,7 +28,36 @@ def merge(nums, low, mid, high):
         tmp.extend(nums[j:high + 1])
     nums[low:high + 1] = tmp # 把合并后的数组拷回原来的数组
 
-# https://leetcode.cn/problems/advantage-shuffle/
+"""
+归并区间
+https://leetcode.cn/problems/interval-list-intersections/submissions/
+"""
+def intervalIntersection(self, firstList: List[List[int]], secondList: List[List[int]]) -> List[List[int]]:
+    ans = []
+    A = firstList;
+    B = secondList
+    i = j = 0
+    while i < len(A) and j < len(B):
+        # Let's check if A[i] intersects B[j].
+        # lo - the startpoint of the intersection
+        # hi - the endpoint of the intersection
+        lo = max(A[i][0], B[j][0])
+        hi = min(A[i][1], B[j][1])
+        if lo <= hi:
+            ans.append([lo, hi])
+        # Remove the interval with the smallest endpoint
+        if A[i][1] < B[j][1]:
+            i += 1
+        else:
+            j += 1
+
+    return ans
+
+
+"""
+田忌赛马
+https://leetcode.cn/problems/advantage-shuffle/
+"""
 def advantageCount(A, B):
         sortedA = sorted(A)
         sortedB = sorted(B)
@@ -46,10 +78,10 @@ def advantageCount(A, B):
                 remaining.append(a)
 
         # Reconstruct the answer from annotations (assigned, remaining)
-        return [assigned[b].pop() if assigned[b] else remaining.pop()
-                for b in B]
+        return [assigned[b].pop() if assigned[b] else remaining.pop()for b in B]
 nums1 = [2,7,11,15] ; nums2 = [1,10,4,11]
 advantageCount(nums1,nums2)
+
 
 
 if __name__ == '__main__':

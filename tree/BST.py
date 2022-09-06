@@ -1,4 +1,12 @@
+from typing import Optional
+
+from tree.binary_tree_construct import TreeNode
+
+
 class Solution:
+    """
+    https://leetcode.cn/problems/delete-node-in-a-bst/
+    """
     def deleteNode(self, root: Optional[TreeNode], key: int) -> Optional[TreeNode]:
         '''
         确认递归函数参数以及返回值：返回更新后剪枝后的当前root节点
