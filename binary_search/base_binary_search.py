@@ -51,19 +51,16 @@ mid 的取值以及区间的选取不同：某个区间可能包含 mid 的值�
         if not nums:
             return -1
         left, right = 0, len(nums) - 1
-        while left < right: # <= -> <
+        while left < right:  # <= -> <
             mid = left + right >> 1
             print('left = {}, right = {}, mid = {}'.format(left, right, mid))
             if nums[mid] < target:
                 left = mid + 1
             else:
-                right = mid # right = mid - 1 -> right = mid
+                right = mid  # right = mid - 1 -> right = mid
         if nums[right] == target:
             return right
         return -1
-
-
-
 
     def searchInsert(self, nums: list, target: int) -> int:
         # 返回大于等于 target 的索引，有可能是最后一个
@@ -86,6 +83,63 @@ mid 的取值以及区间的选取不同：某个区间可能包含 mid 的值�
             # 调试语句
             print('left = {}, right = {}, mid = {}'.format(left, right, mid))
         return left
+
+    """
+    https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/solution/by-huan-huan-20-3ein/
+    给你一个按照非递减顺序排列的整数数组 nums，和一个目标值 target。请你找出给定目标值在数组中的开始位置和结束位置。
+    在排序数组中查找元素的第一个和最后一个位置
+    输入：nums = [5,7,7,8,8,10], target = 8
+    输出：[3,4]
+    """
+
+    def searchRange(self, nums: List[int], target: int) -> List[int]:
+        def searchLeft(nums, target):
+            left, right = 0, len(nums)
+            while left < right:
+                mid = left + (right - left) // 2
+                if nums[mid] == target:
+                    right = mid
+                elif nums[mid] < target:
+                    left = mid + 1
+                elif nums[mid] > target:
+                    right = mid
+            if left == len(nums):
+                return -1
+            return left if nums[left] == target else -1
+
+        def searchRight(nums, target):
+            left, right = 0, len(nums)
+            while left < right:
+                mid = left + (right - left) // 2
+                if nums[mid] == target:
+                    left = mid + 1
+                elif nums[mid] < target:
+                    left = mid + 1
+                elif nums[mid] > target:
+                    right = mid
+            if right == 0:
+                return -1
+            return right - 1 if nums[right - 1] == target else -1
+
+        return [searchLeft(nums, target), searchRight(nums, target)]
+
+
+    """
+    https://leetcode.cn/problems/find-minimum-in-rotated-sorted-array/
+    寻找旋转排序数组中的最小值
+    输入：nums = [3,4,5,1,2]
+    输出：1
+    解释：原数组为 [1,2,3,4,5] ，旋转 3 次得到输入数组。
+    """
+    def findMin(self, nums: List[int]) -> int:
+        low, high = 0, len(nums) - 1
+        while low < high:
+            pivot = low + (high - low) // 2
+            if nums[pivot] < nums[high]:
+                high = pivot
+            else:
+                low = pivot + 1
+        return nums[low]
 
 
 if __name__ == '__main__':

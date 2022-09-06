@@ -151,6 +151,7 @@ def mergeKLists(self, lists: List[ListNode]) -> ListNode:
         p = p.next
     return dummy.next
 
+
 # https://leetcode.cn/problems/partition-list/solution/python3-shuang-lian-biao-he-bing-by-qzxj-p0bs/
 def partition(self, head: ListNode, x: int) -> ListNode:
     p, q = left, right = ListNode(), ListNode()
@@ -168,14 +169,82 @@ def partition(self, head: ListNode, x: int) -> ListNode:
 
     return p.next
 
+
+"""
+给你一个链表，两两交换其中相邻的节点，并返回交换后链表的头节点。你必须在不修改节点内部的值的情况下完成本题（即，只能进行节点交换）。
+https://leetcode.cn/problems/swap-nodes-in-pairs/
+输入：head = [1,2,3,4]
+输出：[2,1,4,3]
+"""
+
+
+def swapPairs(self, head: ListNode) -> ListNode:
+    dummyHead = ListNode(0)
+    dummyHead.next = head
+    temp = dummyHead
+    while temp.next and temp.next.next:
+        node1 = temp.next
+        node2 = temp.next.next
+        temp.next = node2
+        node1.next = node2.next
+        node2.next = node1
+        temp = node1
+    return dummyHead.next
+
+
+"""
+给你链表的头结点 head ，请将其按 升序 排列并返回 排序后的链表 。
+输入：head = [-1,5,3,4,0]
+输出：[-1,0,3,4,5]
+https://leetcode.cn/problems/sort-list/
+"""
+
+
+def sortList(self, head: ListNode) -> ListNode:
+    if not head or not head.next: return head  # termination.
+    # cut the LinkedList at the mid index.
+    slow, fast = head, head.next
+    while fast and fast.next:
+        fast, slow = fast.next.next, slow.next
+    mid, slow.next = slow.next, None  # save and cut.
+    # recursive for cutting.
+    left, right = self.sortList(head), self.sortList(mid)
+    # merge `left` and `right` linked list and return it.
+    h = res = ListNode(0)
+    while left and right:
+        if left.val < right.val:
+            h.next, left = left, left.next
+        else:
+            h.next, right = right, right.next
+        h = h.next
+    h.next = left if left else right
+    return res.next
+
+
 # 走一步 走两步
 # https://leetcode.cn/problems/middle-of-the-linked-list/solution/by-jyd-aphd/
+"""
+示例 1：
+
+输入：[1,2,3,4,5]
+输出：此列表中的结点 3 (序列化形式：[3,4,5])
+返回的结点值为 3 。 (测评系统对该结点序列化表述是 [3,4,5])。
+注意，我们返回了一个 ListNode 类型的对象 ans，这样：
+ans.val = 3, ans.next.val = 4, ans.next.next.val = 5, 以及 ans.next.next.next = NULL.
+
+来源：力扣（LeetCode）
+链接：https://leetcode.cn/problems/middle-of-the-linked-list
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+"""
+
+
 def middleNode(self, head: ListNode) -> ListNode:
-        fast = slow = head
-        while fast and fast.next:
-            fast = fast.next.next
-            slow = slow.next
-        return slow
+    fast = slow = head
+    while fast and fast.next:
+        fast = fast.next.next
+        slow = slow.next
+    return slow
+
 
 # https://leetcode.cn/problems/reverse-linked-list/solution/
 # https://leetcode.cn/problems/reverse-linked-list/solution/yi-bu-yi-bu-jiao-ni-ru-he-yong-di-gui-si-67c3/
@@ -189,22 +258,46 @@ def reverseListIteration(self, head: ListNode) -> ListNode:
         cur = tmp
     return prev
 
+
+"""
+输入：head = [1,2,3,4,5], left = 2, right = 4
+输出：[1,4,3,2,5]
+示例 2：
+
+输入：head = [5], left = 1, right = 1
+输出：[5]
+
+来源：力扣（LeetCode）
+链接：https://leetcode.cn/problems/reverse-linked-list-ii
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+"""
+
+
 # https://leetcode.cn/problems/reverse-linked-list-ii/solution/fan-zhuan-lian-biao-ii-by-leetcode-solut-teyq/
 def reverseBetween(self, head: ListNode, left: int, right: int) -> ListNode:
-        # 设置 dummyNode 是这一类问题的一般做法
-        dummy_node = ListNode(-1)
-        dummy_node.next = head
-        pre = dummy_node
-        for _ in range(left - 1):
-            pre = pre.next
+    # 设置 dummyNode 是这一类问题的一般做法
+    dummy_node = ListNode(-1)
+    dummy_node.next = head
+    pre = dummy_node
+    for _ in range(left - 1):
+        pre = pre.next
 
-        cur = pre.next
-        for _ in range(right - left):
-            next = cur.next
-            cur.next = next.next
-            next.next = pre.next
-            pre.next = next
-        return dummy_node.next
+    cur = pre.next
+    for _ in range(right - left):
+        next = cur.next
+        cur.next = next.next
+        next.next = pre.next
+        pre.next = next
+    return dummy_node.next
+
+
+"""
+给你链表的头节点 head ，每 k 个节点一组进行翻转，请你返回修改后的链表。
+k 是一个正整数，它的值小于或等于链表的长度。如果节点总数不是 k 的整数倍，那么请将最后剩余的节点保持原有顺序。
+你不能只是单纯的改变节点内部的值，而是需要实际进行节点交换。
+来源：力扣（LeetCode）
+链接：https://leetcode.cn/problems/reverse-nodes-in-k-group
+"""
 
 
 def reverse(self, head: ListNode, tail: ListNode):
@@ -216,6 +309,7 @@ def reverse(self, head: ListNode, tail: ListNode):
         prev = p
         p = nex
     return tail, head
+
 
 # https://leetcode.cn/problems/reverse-nodes-in-k-group/solution/k-ge-yi-zu-fan-zhuan-lian-biao-by-leetcode-solutio/
 def reverseKGroup(self, head: ListNode, k: int) -> ListNode:
@@ -241,3 +335,79 @@ def reverseKGroup(self, head: ListNode, k: int) -> ListNode:
     return hair.next
 
 
+"""
+输入：head = [[7,null],[13,0],[11,4],[10,2],[1,0]]
+输出：[[7,null],[13,0],[11,4],[10,2],[1,0]]
+来源：力扣（LeetCode）
+链接：https://leetcode.cn/problems/copy-list-with-random-pointer
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+"""
+
+
+def copyRandomList(self, head: 'Node') -> 'Node':
+    Mydic = dict()
+
+    def recursion(node: 'Node') -> 'Node':
+        if node is None: return None
+        if node in Mydic: return Mydic.get(node)
+        root = Node(node.val)
+        Mydic[node] = root
+        root.next = recursion(node.next)
+        root.random = recursion(node.random)
+        return root
+
+    return recursion(head)
+
+"""
+https://leetcode.cn/problems/reorder-list/
+给定一个单链表 L 的头节点 head ，单链表 L 表示为：
+
+L0 → L1 → … → Ln - 1 → Ln
+请将其重新排列后变为：
+
+L0 → Ln → L1 → Ln - 1 → L2 → Ln - 2 → …
+不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
+
+来源：力扣（LeetCode）
+链接：https://leetcode.cn/problems/reorder-list
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+"""
+class Solution:
+    def reorderList(self, head: ListNode) -> None:
+        if not head:
+            return
+
+        mid = self.middleNode(head)
+        l1 = head
+        l2 = mid.next
+        mid.next = None
+        l2 = self.reverseList(l2)
+        self.mergeList(l1, l2)
+
+    def middleNode(self, head: ListNode) -> ListNode:
+        slow = fast = head
+        while fast.next and fast.next.next:
+            slow = slow.next
+            fast = fast.next.next
+        return slow
+
+    def reverseList(self, head: ListNode) -> ListNode:
+        prev = None
+        curr = head
+        while curr:
+            nextTemp = curr.next
+            curr.next = prev
+            prev = curr
+            curr = nextTemp
+        return prev
+
+    def mergeList(self, l1: ListNode, l2: ListNode):
+        while l1 and l2:
+            l1_tmp = l1.next
+            l2_tmp = l2.next
+
+            l1.next = l2
+            l1 = l1_tmp
+
+            l2.next = l1
+            l2 = l2_tmp

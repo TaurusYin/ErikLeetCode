@@ -1,3 +1,14 @@
+
+#https://mp.weixin.qq.com/s/yewlHvHSilMsrUMFIO8WAA  二叉树的下一个节点
+"""
+节点(设为x)中序遍历的下一个节点有以下可能：
+
+若x有右子树。则x的下一个节点为x右子树最左侧节点。如，2的下一个节点为8。
+若x没有右子树，又分为2种情况。
+若x是父节点的左孩子。则x的父节点就是x的下一个节点。如，7的下一个节点是4。
+若x是父节点的右孩子。则沿着父节点向上，直到找到一个节点的父节点的左孩子是该节点，则该节点的父节点就是x的下一个节点。如，9的下一个节点是1。
+"""
+
 from typing import List, Optional
 from utils.base_decorator import CommonLogger
 a = [1,3,4]

@@ -1,7 +1,13 @@
 import collections
 from typing import List
 
-
+"""
+请你找出所有从节点 0 到节点 n-1 的路径并输出（不要求按特定顺序）
+ graph[i] 是一个从节点 i 可以访问的所有节点的列表（即从节点 i 到节点 graph[i][j]存在一条有向边）。
+来源：力扣（LeetCode）
+链接：https://leetcode.cn/problems/all-paths-from-source-to-target
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+"""
 def allPathsSourceTarget(graph: List[List[int]]) -> List[List[int]]:
     res = []
 
@@ -72,6 +78,18 @@ __allPathsSourceTarget(graph)
 # https://leetcode.cn/problems/course-schedule/
 """
 O(m+n)
+输入：numCourses = 2, prerequisites = [[1,0]]
+输出：true
+解释：总共有 2 门课程。学习课程 1 之前，你需要完成课程 0 。这是可能的。
+示例 2：
+
+输入：numCourses = 2, prerequisites = [[1,0],[0,1]]
+输出：false
+解释：总共有 2 门课程。学习课程 1 之前，你需要先完成​课程 0 ；并且学习课程 0 之前，你还应先完成课程 1 。这是不可能的
+
+来源：力扣（LeetCode）
+链接：https://leetcode.cn/problems/course-schedule
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 """
 def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
     # 先根据依赖关系建图
@@ -133,3 +151,5 @@ def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
             indegrees[cur] -= 1
             if not indegrees[cur]: queue.append(cur)
     return not numCourses
+
+

@@ -68,6 +68,11 @@ def reverseParentheses(self, s):
     return ''.join(stack)
 
 
+"""
+给定一个 n × n 的二维矩阵 matrix 表示一个图像。请你将图像顺时针旋转 90 度。
+"""
+
+
 def _rotate(matrix: List[List[int]]) -> None:
     # https://leetcode.cn/problems/rotate-image/submissions/
     n = len(matrix)
@@ -98,6 +103,38 @@ def rotate_clockwise(matrix: List[List[int]]) -> None:
 def rotate_non_clockwise(matrix: List[List[int]]) -> None:
     matrix = list(zip(*matrix))[::-1]
     return matrix
+
+
+"""
+二分查找
+https://leetcode.cn/problems/search-a-2d-matrix-ii/solution/sou-suo-er-wei-ju-zhen-ii-by-leetcode-so-9hcx/
+"""
+
+
+def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+    for row in matrix:
+        idx = bisect.bisect_left(row, target)
+        if idx < len(row) and row[idx] == target:
+            return True
+    return False
+
+
+"""
+Z 字形查找
+"""
+
+
+def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+    m, n = len(matrix), len(matrix[0])
+    x, y = 0, n - 1
+    while x < m and y >= 0:
+        if matrix[x][y] == target:
+            return True
+        if matrix[x][y] > target:
+            y -= 1
+        else:
+            x += 1
+    return False
 
 
 def generateMatrix(self, n: int) -> List[List[int]]:
@@ -156,6 +193,41 @@ def reverseString(self, s: List[str]) -> None:
         s[l], s[r] = s[r], s[l]
         l += 1
         r -= 1
+
+
+"""
+输入：s = "the sky is blue"
+输出："blue is sky the"
+https://leetcode.cn/problems/reverse-words-in-a-string/submissions/
+"""
+
+
+def reverseWords(self, s: str) -> str:
+    return " ".join(reversed(s.split()))
+
+
+def reverseWords(self, s: str) -> str:
+    left, right = 0, len(s) - 1
+    # 去掉字符串开头的空白字符
+    while left <= right and s[left] == ' ':
+        left += 1
+
+    # 去掉字符串末尾的空白字符
+    while left <= right and s[right] == ' ':
+        right -= 1
+
+    d, word = collections.deque(), []
+    # 将单词 push 到队列的头部
+    while left <= right:
+        if s[left] == ' ' and word:
+            d.appendleft(''.join(word))
+            word = []
+        elif s[left] != ' ':
+            word.append(s[left])
+        left += 1
+    d.appendleft(''.join(word))
+
+    return ' '.join(d)
 
 
 # https://leetcode.cn/problems/longest-palindromic-substring/solution/zui-chang-hui-wen-zi-chuan-by-leetcode-solution/
@@ -258,6 +330,135 @@ def multiply(self, num1: str, num2: str) -> str:
     index = 1 if ansArr[0] == 0 else 0
     ans = "".join(str(x) for x in ansArr[index:])
     return ans
+
+
+def myAtoi(self, s: str) -> int:
+    flag = 1  # 标记正负号，默认为正
+    n = len(s)
+    num = 0
+    i = 0
+    if not s:  # 字符串为空直接返回0
+        return 0
+    for i in range(n):  # 跳过空格
+        if s[i] != ' ':
+            break
+    if s[i] == '-' and i < n - 1:  # 空格后的第一个字符为'-'，并且'-'不是最后一个字符
+        flag = -1
+        i += 1
+    elif s[i] == '+' and i < n - 1:  # 空格后的第一个字符为'+'，并且'+'不是最后一个字符
+        flag = 1
+        i += 1
+    else:
+        if not s[i].isdigit():  # 空格后的第一个字符不是'+、-'也不是数字
+            return 0
+
+    while s[i].isdigit() and i < n:
+        num = num * 10 + int(s[i])
+        if i == n - 1 or not s[i + 1].isdigit():  # 遍历到最后一个字符，或下一个字符不是数字，跳出循环
+            break
+        i += 1
+    num = num * flag
+    if num < -1 * 2 ** 31:  # 判断是否越界
+        return -1 * 2 ** 31
+    elif num > 2 ** 31 - 1:
+        return 2 ** 31 - 1
+    else:
+        return num
+
+"""
+https://leetcode.cn/problems/decode-ways/solution/jie-ma-fang-fa-by-leetcode-solution-p8np/
+示例 1：
+输入：s = "12"
+输出：2
+解释：它可以解码为 "AB"（1 2）或者 "L"（12）。
+示例 2：
+输入：s = "226"
+输出：3
+解释：它可以解码为 "BZ" (2 26), "VF" (22 6), 或者 "BBF" (2 2 6) 。
+来源：力扣（LeetCode）
+链接：https://leetcode.cn/problems/decode-ways
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+"""
+def numDecodings(self, s: str) -> int:
+    n = len(s)
+    f = [1] + [0] * n
+    for i in range(1, n + 1):
+        if s[i - 1] != '0':
+            f[i] += f[i - 1]
+        if i > 1 and s[i - 2] != '0' and int(s[i - 2:i]) <= 26:
+            f[i] += f[i - 2]
+    return f[n]
+
+
+"""
+给你一个整数 columnNumber ，返回它在 Excel 表中相对应的列名称。
+
+例如：
+A -> 1
+B -> 2
+C -> 3
+...
+Z -> 26
+AA -> 27
+AB -> 28 
+...
+ 
+示例 1：
+输入：columnNumber = 1
+输出："A"
+来源：力扣（LeetCode）
+链接：https://leetcode.cn/problems/excel-sheet-column-title
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+"""
+
+
+def convertToTitle(self, columnNumber: int) -> str:
+    ans = list()
+    while columnNumber > 0:
+        a0 = (columnNumber - 1) % 26 + 1
+        ans.append(chr(a0 - 1 + ord("A")))
+        columnNumber = (columnNumber - a0) // 26
+    return "".join(ans[::-1])
+
+
+"""
+整数转换英文表示
+示例 1：
+输入：num = 123
+输出："One Hundred Twenty Three"
+示例 2：
+输入：num = 12345
+输出："Twelve Thousand Three Hundred Forty Five"
+来源：力扣（LeetCode）
+链接：https://leetcode.cn/problems/integer-to-english-words
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+"""
+class Solution:
+    def __init__(self):
+        self.nt = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve",
+        "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"]
+        self.tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"]
+        self.t = ["Thousand", "Million", "Billion"]
+
+    def numberToWords(self, num: int) -> str:
+        def helper(num) -> list[str]:
+            if num < 20:
+                return [self.nt[num]]
+            elif num < 100:
+                res = [self.tens[num//10]]
+                if num % 10:
+                    res += helper(num % 10)
+                return res
+            elif num < 1000:
+                res = [self.nt[num//100], "Hundred"]
+                if num % 100:
+                    res += helper(num%100)
+                return res
+            for p, w in enumerate(self.t, 1):
+                if num < 1000 ** (p + 1):
+                    return helper(num // 1000 ** p) + [w] + helper(num % 1000 ** p) if num % 1000 ** p else helper(num // 1000 ** p) + [w]
+        return " ".join(helper(num))
+
 
 
 class Solution:

@@ -1,12 +1,13 @@
 # https://leetcode.cn/problems/remove-duplicates-from-sorted-array/
 from typing import List
 
-
 """
 初始化： 双指针 ii , jj 分列水槽左右两端；循环收窄： 直至双指针相遇时跳出；更新面积最大值 resres ；
 选定两板高度中的短板，向中间收窄一格；返回值： 返回面积最大值 resres 即可；
 链接：https://leetcode.cn/problems/container-with-most-water/solution/container-with-most-water-shuang-zhi-zhen-fa-yi-do/
 """
+
+
 def maxArea(self, height: List[int]) -> int:
     i, j, res = 0, len(height) - 1, 0
     while i < j:
@@ -17,6 +18,54 @@ def maxArea(self, height: List[int]) -> int:
             res = max(res, height[j] * (j - i))
             j -= 1
     return res
+
+"""
+https://leetcode.cn/problems/maximum-product-subarray/solution/shuang-zhi-zhen-by-wanglongjiang-ier1/
+示例 1:
+输入: nums = [2,3,-2,4]
+输出: 6
+解释: 子数组 [2,3] 有最大乘积 6。
+示例 2:
+输入: nums = [-2,0,-1]
+输出: 0
+解释: 结果不能为 2, 因为 [-2,-1] 不是子数组。
+来源：力扣（LeetCode）
+链接：https://leetcode.cn/problems/maximum-product-subarray
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+0与任何数的乘积都是0，因此可以将数组看成被0分割的子数组，在各个子数组中查找乘积最大的值。
+在一个非0的数组中求最大乘积，需要分析正负性。
+- 没有负数或者负数为偶数个，最大乘积就是整个数组的乘积
+- 有奇数个负数，如果第i个元素为负数，则[start,i-1]，[i+1,end]这2个区间的乘积都是最大乘积的候选。
+通过下面2个指针交替移动算法可以计算所有[start,i-1]和[i+1,end]的乘积。
+
+right指针向右移动，mul累计left至right指针之间的乘积，直至right遇到0或末尾。
+向右移动left指针，mul除以被移出子数组的元素。
+重复以上过程直至left指针移动到末尾。
+时间复杂度：O(n)
+空间复杂度：O(1)
+作者：wanglongjiang
+链接：https://leetcode.cn/problems/maximum-product-subarray/solution/shuang-zhi-zhen-by-wanglongjiang-ier1/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+"""
+def maxProduct(self, nums: List[int]) -> int:
+    left, right, n = 0, 0, len(nums)
+    mul, product = 1, float('-inf')
+    while left < n:
+        while right < n and nums[right] != 0:  # 移动right指针直至遇到0，这中间用mul累计乘积，product记录最大的乘积
+            mul *= nums[right]
+            right += 1
+            product = max(product, mul)
+        while left + 1 < right:  # 移动left指针，这中间用mul累计乘积，product记录最大的乘积
+            mul /= nums[left]
+            left += 1
+            product = max(product, mul)
+        while right < n and nums[right] == 0:  # 跳过0
+            product = max(product, 0)  # 有可能所有子数组的乘积都小于0，所以0也是候选
+            right += 1
+        left = right
+        mul = 1
+    return int(product)
 
 
 # https://leetcode.cn/problems/remove-duplicates-from-sorted-array/
@@ -130,3 +179,100 @@ def nSumTarget(self, nums, n, start, target):
                     res.append(j)
 
     return res
+
+
+"""
+给定两个大小分别为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。请你找出并返回这两个正序数组的 中位数 。
+算法的时间复杂度应该为 O(log (m+n)) 。
+来源：力扣（LeetCode）
+链接：https://leetcode.cn/problems/median-of-two-sorted-arrays
+"""
+
+
+def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
+    num = nums1 + nums2
+    num.sort()
+    n = len(num)
+
+    slow, fast = 0, 0
+    while fast < n - 1:
+        fast += 1
+        slow += 1
+        if fast < n - 1:
+            fast += 1
+
+    if n % 2 == 0:
+        return (num[slow] + num[slow - 1]) / 2
+    else:
+        return float(num[slow])
+
+
+"""
+中位数是有序列表中间的数。如果列表长度是偶数，中位数则是中间两个数的平均值。
+
+例如，
+
+[2,3,4] 的中位数是 3
+
+[2,3] 的中位数是 (2 + 3) / 2 = 2.5
+
+设计一个支持以下两种操作的数据结构：
+
+void addNum(int num) - 从数据流中添加一个整数到数据结构中。
+double findMedian() - 返回目前所有元素的中位数。
+示例：
+
+addNum(1)
+addNum(2)
+findMedian() -> 1.5
+addNum(3) 
+findMedian() -> 2
+
+链接：https://leetcode.cn/problems/find-median-from-data-stream
+"""
+from sortedcontainers import SortedList
+
+class MedianFinder:
+
+    def __init__(self):
+        self.nums = SortedList()
+        self.left = self.right = None
+        self.left_value = self.right_value = None
+
+    def addNum(self, num: int) -> None:
+        nums_ = self.nums
+
+        n = len(nums_)
+        nums_.add(num)
+
+        if n == 0:
+            self.left = self.right = 0
+        else:
+            # 模拟双指针，当 num 小于 self.left 或 self.right 指向的元素时，num 的加入会导致对应指针向右移动一个位置
+            if num < self.left_value:
+                self.left += 1
+            if num < self.right_value:
+                self.right += 1
+
+            if n & 1:
+                if num < self.left_value:
+                    self.left -= 1
+                else:
+                    self.right += 1
+            else:
+                if self.left_value < num < self.right_value:
+                    self.left += 1
+                    self.right -= 1
+                elif num >= self.right_value:
+                    self.left += 1
+                else:
+                    self.right -= 1
+                    self.left = self.right
+
+        self.left_value = nums_[self.left]
+        self.right_value = nums_[self.right]
+
+    def findMedian(self) -> float:
+        return (self.left_value + self.right_value) / 2
+
+

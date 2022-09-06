@@ -1,6 +1,8 @@
 from typing import List
 # from itertools import pairwise
 import collections
+
+
 # https://leetcode.cn/problems/alien-dictionary/solution/huo-xing-ci-dian-by-leetcode-solution-nr0l/
 
 def alienOrder(words: List[str]) -> str:
@@ -76,5 +78,24 @@ def _alienOrder(words: List[str]) -> str:
     # 3 判断图中是否有环: 如果拓扑排序的长度和图中顶点个数不同,则有环
     return "" if len(topology) != len(indegree) else "".join(topology)
 
+"""
+给你一个整数 n ，按字典序返回范围 [1, n] 内所有整数。字典序
+https://leetcode.cn/problems/lexicographical-numbers/solution/zi-dian-xu-pai-shu-by-leetcode-solution-98mz/
+你必须设计一个时间复杂度为 O(n) 且使用 O(1) 额外空间的算法。
+"""
+def lexicalOrder(self, n: int) -> List[int]:
+    ans = [0] * n
+    num = 1
+    for i in range(n):
+        ans[i] = num
+        if num * 10 <= n:
+            num *= 10
+        else:
+            while num % 10 == 9 or num + 1 > n:
+                num //= 10
+            num += 1
+    return ans
+
+
 if __name__ == '__main__':
-    alienOrder(words=["wrt","wrf","er","ett","rftt"])
+    alienOrder(words=["wrt", "wrf", "er", "ett", "rftt"])

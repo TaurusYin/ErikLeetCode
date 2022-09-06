@@ -1,6 +1,25 @@
 # envelopes = sorted(envelopes, key=lambda x: (x[0], -x[1]))
 
 
+"""
+示例 1：
+输入：nums = [10,2]
+输出："210"
+示例 2：
+输入：nums = [3,30,34,5,9]
+输出："9534330"
+https://leetcode.cn/problems/largest-number/solution/python3-san-chong-fang-fa-qiu-zui-da-shu-cpi4/
+"""
+def largestNumber(self, nums: List[int]) -> str:
+    def cmp(x, y):
+        return 1 if x + y < y + x else -1
+
+    nums = list(map(str, nums))
+    nums.sort(key=cmp_to_key(cmp))
+    res = str(int("".join(nums)))
+    return res
+
+
 arr = [[1, 2, 3], [3, 2, 1], [4, 2, 1], [6, 4, 3]]
 indices = [[2, 0], [0, 1]]
 def custom_sort(x):

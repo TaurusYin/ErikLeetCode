@@ -14,17 +14,17 @@ class Solution:
         dp = [[inf] * len(costs[0]) for _ in range(len(costs))]
         dp[0] = costs[0]
         print(dp)
-        for i in range(0, len(costs)-1):
-            dp[i + 1][0] = costs[i+1][0] + min(dp[i][1], dp[i][2])
-            dp[i + 1][1] = costs[i+1][1] + min(dp[i][0], dp[i][2])
-            dp[i + 1][2] = costs[i+1][2] + min(dp[i][0], dp[i][1])
+        for i in range(0, len(costs) - 1):
+            dp[i + 1][0] = costs[i + 1][0] + min(dp[i][1], dp[i][2])
+            dp[i + 1][1] = costs[i + 1][1] + min(dp[i][0], dp[i][2])
+            dp[i + 1][2] = costs[i + 1][2] + min(dp[i][0], dp[i][1])
         return min(dp[-1])
-
 
     """
     https://leetcode.cn/problems/russian-doll-envelopes/
     请计算 最多能有多少个 信封能组成一组“俄罗斯套娃”信封（即可以把一个信封放到另一个信封里面。
     """
+
     def maxEnvelopes(self, envelopes: List[List[int]]) -> int:
         # 基于w升序，h降序排序
         envelopes = sorted(envelopes, key=lambda x: (x[0], -x[1]))
@@ -95,6 +95,23 @@ class Solution:
             dp[i + 1] = dp[i] + nums[i] if dp[i] > 0 else nums[i]
         print(dp)
         return max(dp)
+
+    """
+    最长重复子数组
+    输入：nums1 = [1,2,3,2,1], nums2 = [3,2,1,4,7]
+    输出：3
+    解释：长度最长的公共子数组是 [3,2,1] 。
+    """
+    def findLength(self, nums1: List[int], nums2: List[int]) -> int:
+        # dp[i+1][j+1] = dp[i][j] + 1 if nums1[i] == nums[j] else 0
+        dp = [[0] * (len(nums2) + 1) for _ in range(len(nums1) + 1)]
+        result = 0
+        for i in range(0, len(nums1)):
+            for j in range(0, len(nums2)):
+                if nums1[i] == nums2[j]:
+                    dp[i + 1][j + 1] = dp[i][j] + 1
+                result = max(result, dp[i + 1][j + 1])
+        return result
 
     def longest_common_subarray(self, nums1: List[int], nums2: List[int]) -> int:
         """
@@ -199,6 +216,106 @@ class Solution:
 
         return help(s, t)
 
+    """
+    给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。
+你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。
+返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。
+链接：https://leetcode.cn/problems/best-time-to-buy-and-sell-stock
+    """
+
+    def _maxProfit(self, prices: List[int]) -> int:
+        # dp[i] = dp[i-1]
+        dp = []
+        dp.append(prices[0])
+        profit = 0
+        for i in range(1, len(prices)):
+            dp.append(min(dp[i - 1], prices[i]))
+            profit = max(profit, prices[i] - dp[i])
+        return profit
+
+    def _maxProfit(self, prices: List[int]) -> int:
+        low = float("inf")
+        result = 0
+        for i in range(len(prices)):
+            low = min(low, prices[i])  # 取最左最小价格
+            result = max(result, prices[i] - low)  # 直接取最大区间利润
+        return result
+
+    def _maxProfit(self, prices: List[int]) -> int:
+        # dp[i] = dp[i-1] + max(prices[i] - prices[i-1], 0)
+        # dp[i] = min(dp[i-1], prices[i])
+        res = [0]
+        mem = []
+        mem.append(prices[0])
+        for i in range(1, len(prices)):
+            min_value = min(mem[i - 1], prices[i])
+            mem.append(min_value)
+            res.append(prices[i] - min_value)
+        return max(res)
+
+    """
+    输入：prices = [3,3,5,0,0,3,1,4]
+输出：6
+解释：在第 4 天（股票价格 = 0）的时候买入，在第 6 天（股票价格 = 3）的时候卖出，这笔交易所能获得利润 = 3-0 = 3 。
+     随后，在第 7 天（股票价格 = 1）的时候买入，在第 8 天 （股票价格 = 4）的时候卖出，这笔交易所能获得利润 = 4-1 = 3 。
+
+来源：力扣（LeetCode）
+链接：https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iii
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+    """
+    def maxProfit(self, prices: List[int]) -> int:
+        n = len(prices)
+        buy1 = buy2 = -prices[0]
+        sell1 = sell2 = 0
+        for i in range(1, n):
+            buy1 = max(buy1, -prices[i])
+            sell1 = max(sell1, buy1 + prices[i])
+            buy2 = max(buy2, sell1 - prices[i])
+            sell2 = max(sell2, buy2 + prices[i])
+        return sell2
+
+    """
+    EDit distance
+    输入：word1 = "horse", word2 = "ros"
+    输出：3
+解释：
+horse -> rorse (将 'h' 替换为 'r')
+rorse -> rose (删除 'r')
+rose -> ros (删除 'e')
+
+来源：力扣（LeetCode）
+链接：https://leetcode.cn/problems/edit-distance
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+    """
+
+    def minDistance(self, word1: str, word2: str) -> int:
+        n = len(word1)
+        m = len(word2)
+
+        # 有一个字符串为空串
+        if n * m == 0:
+            return n + m
+
+        # DP 数组
+        D = [[0] * (m + 1) for _ in range(n + 1)]
+
+        # 边界状态初始化
+        for i in range(n + 1):
+            D[i][0] = i
+        for j in range(m + 1):
+            D[0][j] = j
+
+        # 计算所有 DP 值
+        for i in range(1, n + 1):
+            for j in range(1, m + 1):
+                left = D[i - 1][j] + 1
+                down = D[i][j - 1] + 1
+                left_down = D[i - 1][j - 1]
+                if word1[i - 1] != word2[j - 1]:
+                    left_down += 1
+                D[i][j] = min(left, down, left_down)
+
+        return D[n][m]
 
 
 if __name__ == '__main__':
@@ -207,4 +324,4 @@ if __name__ == '__main__':
     nums2 = [3, 2, 1, 4, 7, 8]
     s.longest_common_subarray(nums1=nums1, nums2=nums2)
     s.numDistinct(s="rabbbit", t="rabbit")
-    s.minCost(costs=[[17,2,17],[16,16,5],[14,3,19]])
+    s.minCost(costs=[[17, 2, 17], [16, 16, 5], [14, 3, 19]])

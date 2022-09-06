@@ -1,6 +1,34 @@
 import collections
 from typing import List
 
+"""
+https://leetcode.cn/problems/decode-string/
+示例 1：
+
+输入：s = "3[a]2[bc]"
+输出："aaabcbc"
+示例 2：
+
+输入：s = "3[a2[c]]"
+输出："accaccacc"
+"""
+
+
+def decodeString(self, s: str) -> str:
+    stack, res, multi = [], "", 0
+    for c in s:
+        if c == '[':
+            stack.append([multi, res])
+            res, multi = "", 0
+        elif c == ']':
+            cur_multi, last_res = stack.pop()
+            res = last_res + cur_multi * res
+        elif '0' <= c <= '9':
+            multi = multi * 10 + int(c)
+        else:
+            res += c
+    return res
+
 
 # https://leetcode.cn/problems/daily-temperatures/
 def dailyTemperatures(T: List[int]) -> List[int]:
@@ -35,6 +63,8 @@ def nextGreaterElementsCircle(self, nums: List[int]) -> List[int]:
 """
 找大弹大， 当前大于栈尾，递减栈； 找小弹小，当前小于栈尾，递增栈 
 """
+
+
 def nextGreaterElement(nums1: List[int], nums2: List[int]) -> List[int]:
     stack = []
     res_dict = {i: -1 for i in nums2}
@@ -60,6 +90,8 @@ nextGreaterElement(nums1, nums2)
 解释：移除掉三个数字 4, 3, 和 2 形成一个新的最小的数字 1219 
 https://leetcode.cn/problems/remove-k-digits/solution/yi-zhao-chi-bian-li-kou-si-dao-ti-ma-ma-zai-ye-b-5/
 """
+
+
 def removeKdigits(self, num, k):
     stack = []
     remain = len(num) - k
@@ -79,6 +111,7 @@ def removeKdigits(self, num, k):
 输出："acdb"
 """
 
+
 def smallestSubsequence(self, s: str) -> str:
     stack = list()
     for k, v in enumerate(s):
@@ -88,6 +121,7 @@ def smallestSubsequence(self, s: str) -> str:
             stack.pop()
         stack.append(v)
     return ''.join(stack)
+
 
 def get_all_sub(arr):
     n = len(arr)

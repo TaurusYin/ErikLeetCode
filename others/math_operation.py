@@ -40,6 +40,8 @@ def singleNumber(self, nums: List[int]) -> int:
 给定一个整数数组 nums，其中恰好有两个元素只出现一次，其余所有元素均出现两次。 找出只出现一次的那两个元素。你可以按 任意顺序 返回答案。
 https://leetcode.cn/problems/single-number-iii/
 """
+
+
 def singleNumber(self, nums: List[int]) -> List[int]:
     s = set()
     for num in nums:
@@ -72,6 +74,24 @@ def _missingNumber(self, nums: List[int]) -> int:
     for x in nums:
         sum += x
     return int(expect - sum)
+
+
+"""
+https://leetcode.cn/problems/first-missing-positive/
+输入：nums = [1,2,0]
+输出：3
+给你一个未排序的整数数组 nums ，请你找出其中没有出现的最小的正整数
+O(n)
+"""
+
+
+def firstMissingPositive(self, nums: List[int]) -> int:
+    for a in nums:  # 遍历每个座位，记当前坐着a号乘客
+        while 0 < a <= len(nums) and a != nums[a - 1]:  # 乘客a是正票但坐错了! 其座位被 ta=nums[a-1]占了
+            nums[a - 1], a = a, nums[a - 1]  # a和ta两人互换则a对号入座。此后ta相当于新的a，去找自己的座位（循环执行）
+    for i in range(len(nums)):
+        if i + 1 != nums[i]: return i + 1  # 找到首个没有对号入座的nums[i]!=i+1
+    return len(nums) + 1  # 满座，返回N+1
 
 
 """
@@ -201,3 +221,50 @@ def superPow(self, a: int, b: List[int]) -> int:
         a = quick_pow(a, 10)
 
     return ans
+
+
+"""
+https://leetcode.cn/problems/sqrtx/solution/x-de-ping-fang-gen-by-leetcode-solution/
+"""
+
+
+def mySqrt(self, x: int) -> int:
+    l, r, ans = 0, x, -1
+    while l <= r:
+        mid = (l + r) // 2
+        if mid * mid <= x:
+            ans = mid
+            l = mid + 1
+        else:
+            r = mid - 1
+    return ans
+
+
+"""
+输入：n = 2
+输出：[0,1,3,2]
+解释：
+[0,1,3,2] 的二进制表示是 [00,01,11,10] 。
+- 00 和 01 有一位不同
+- 01 和 11 有一位不同
+- 11 和 10 有一位不同
+- 10 和 00 有一位不同
+[0,2,3,1] 也是一个有效的格雷码序列，其二进制表示是 [00,10,11,01] 。
+- 00 和 10 有一位不同
+- 10 和 11 有一位不同
+- 11 和 01 有一位不同
+- 01 和 00 有一位不同
+
+来源：力扣（LeetCode）
+链接：https://leetcode.cn/problems/gray-code
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+"""
+
+
+def grayCode(self, n: int) -> List[int]:
+    ans = [0] * (1 << n)
+    for i in range(1 << n):
+        ans[i] = (i >> 1) ^ i
+    return ans
+
+
