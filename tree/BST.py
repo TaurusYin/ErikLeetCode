@@ -7,6 +7,7 @@ class Solution:
     """
     https://leetcode.cn/problems/delete-node-in-a-bst/
     """
+
     def deleteNode(self, root: Optional[TreeNode], key: int) -> Optional[TreeNode]:
         '''
         确认递归函数参数以及返回值：返回更新后剪枝后的当前root节点
@@ -142,14 +143,15 @@ class Solution:
     二叉搜索树后序遍历
     https://leetcode.cn/problems/er-cha-sou-suo-shu-de-hou-xu-bian-li-xu-lie-lcof/solution/mian-shi-ti-33-er-cha-sou-suo-shu-de-hou-xu-bian-6/
     """
+
     def verifyPostorder(self, postorder: [int]) -> bool:
-            stack, root = [], float("+inf")
-            for i in range(len(postorder) - 1, -1, -1):
-                if postorder[i] > root: return False
-                while (stack and postorder[i] < stack[-1]):
-                    root = stack.pop()
-                stack.append(postorder[i])
-            return True
+        stack, root = [], float("+inf")
+        for i in range(len(postorder) - 1, -1, -1):
+            if postorder[i] > root: return False
+            while (stack and postorder[i] < stack[-1]):
+                root = stack.pop()
+            stack.append(postorder[i])
+        return True
 
     """
     输入: head = [-10,-3,0,5,9]
@@ -184,6 +186,7 @@ class Solution:
         length = getLength(head)
         return buildTree(0, length - 1)
 
+
 """
 作者：fuxuemingzhu
 链接：https://leetcode.cn/problems/binary-search-tree-iterator/solution/fu-xue-ming-zhu-dan-diao-zhan-die-dai-la-dkrm/
@@ -191,6 +194,8 @@ class Solution:
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 实现一个二叉搜索树迭代器类BSTIterator ，表示一个按中序遍历二叉搜索树（BST）的迭代器：
 """
+
+
 class BSTIterator(object):
 
     def __init__(self, root):
@@ -210,3 +215,21 @@ class BSTIterator(object):
     def hasNext(self):
         return len(self.stack) > 0
 
+"""
+长度为 nn 的序列能构成的不同二叉搜索树的个数
+https://leetcode.cn/problems/unique-binary-search-trees/solution/bu-tong-de-er-cha-sou-suo-shu-by-leetcode-solution/
+以 ii 为根、序列长度为 nn 的不同二叉搜索树个数 (1 \leq i \leq n)(1≤i≤n)
+"""
+def numTrees(self, n):
+    """
+    :type n: int
+    :rtype: int
+    """
+    G = [0] * (n + 1)
+    G[0], G[1] = 1, 1
+
+    for i in range(2, n + 1):
+        for j in range(1, i + 1):
+            G[i] += G[j - 1] * G[i - j]
+
+    return G[n]
