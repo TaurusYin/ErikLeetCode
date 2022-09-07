@@ -184,4 +184,29 @@ class Solution:
         length = getLength(head)
         return buildTree(0, length - 1)
 
+"""
+作者：fuxuemingzhu
+链接：https://leetcode.cn/problems/binary-search-tree-iterator/solution/fu-xue-ming-zhu-dan-diao-zhan-die-dai-la-dkrm/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+实现一个二叉搜索树迭代器类BSTIterator ，表示一个按中序遍历二叉搜索树（BST）的迭代器：
+"""
+class BSTIterator(object):
+
+    def __init__(self, root):
+        self.stack = []
+        while root:
+            self.stack.append(root)
+            root = root.left
+
+    def next(self):
+        cur = self.stack.pop()
+        node = cur.right
+        while node:
+            self.stack.append(node)
+            node = node.left
+        return cur.val
+
+    def hasNext(self):
+        return len(self.stack) > 0
 
