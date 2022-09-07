@@ -140,6 +140,11 @@ class Solution:
         return max_value
 
     def lengthOfLongestSubstring(self, s: str) -> int:
+        """
+        无重复最长字串
+        :param s:
+        :return:
+        """
         # 判断第j个字符是否在dp[i-1]的区间之内 https://leetcode.cn/problems/longest-substring-without-repeating-characters/submissions/
         n = len(s)
         if n <= 1:

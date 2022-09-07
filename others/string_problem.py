@@ -106,7 +106,7 @@ def rotate_non_clockwise(matrix: List[List[int]]) -> None:
 
 
 """
-二分查找
+二分查找 搜索二维矩阵
 https://leetcode.cn/problems/search-a-2d-matrix-ii/solution/sou-suo-er-wei-ju-zhen-ii-by-leetcode-so-9hcx/
 """
 
@@ -292,6 +292,12 @@ def longestPalindrome(self, s: str) -> str:
     return s[start: end + 1]
 
 
+"""
+字符串相加：：
+输入：num1 = "11", num2 = "123"
+输出："134"
+链接：https://leetcode.cn/problems/add-strings
+"""
 # https://leetcode.cn/problems/add-strings/solution/add-strings-shuang-zhi-zhen-fa-by-jyd/
 def addStrings(self, num1: str, num2: str) -> str:
     res = ""
@@ -332,6 +338,12 @@ def multiply(self, num1: str, num2: str) -> str:
     return ans
 
 
+"""
+输入：s = "42"
+输出：42
+解释：加粗的字符串为已经读入的字符，插入符号是当前读取的字符。
+https://leetcode.cn/problems/string-to-integer-atoi/
+"""
 def myAtoi(self, s: str) -> int:
     flag = 1  # 标记正负号，默认为正
     n = len(s)
@@ -392,7 +404,7 @@ def numDecodings(self, s: str) -> int:
 
 """
 给你一个整数 columnNumber ，返回它在 Excel 表中相对应的列名称。
-
+Excel
 例如：
 A -> 1
 B -> 2
@@ -459,6 +471,34 @@ class Solution:
                     return helper(num // 1000 ** p) + [w] + helper(num % 1000 ** p) if num % 1000 ** p else helper(num // 1000 ** p) + [w]
         return " ".join(helper(num))
 
+"""
+https://leetcode.cn/problems/decode-string/
+示例 1：
+
+输入：s = "3[a]2[bc]"
+输出："aaabcbc"
+示例 2：
+
+输入：s = "3[a2[c]]"
+输出："accaccacc"
+"""
+
+
+def decodeString(self, s: str) -> str:
+    stack, res, multi = [], "", 0
+    for c in s:
+        if c == '[':
+            stack.append([multi, res])
+            res, multi = "", 0
+        elif c == ']':
+            cur_multi, last_res = stack.pop()
+            res = last_res + cur_multi * res
+        elif '0' <= c <= '9':
+            multi = multi * 10 + int(c)
+        else:
+            res += c
+    return res
+
 
 
 class Solution:
@@ -474,6 +514,25 @@ class Solution:
         val1 = node.val + left[1] + right[1]  # 偷当前节点，不能偷子节点
         val2 = max(left[0], left[1]) + max(right[0], right[1])  # 不偷当前节点，可偷可不偷子节点
         return (val1, val2)
+
+def maxProduct(self, nums: List[int]) -> int:
+    left, right, n = 0, 0, len(nums)
+    mul, product = 1, float('-inf')
+    while left < n:
+        while right < n and nums[right] != 0:  # 移动right指针直至遇到0，这中间用mul累计乘积，product记录最大的乘积
+            mul *= nums[right]
+            right += 1
+            product = max(product, mul)
+        while left + 1 < right:  # 移动left指针，这中间用mul累计乘积，product记录最大的乘积
+            mul /= nums[left]
+            left += 1
+            product = max(product, mul)
+        while right < n and nums[right] == 0:  # 跳过0
+            product = max(product, 0)  # 有可能所有子数组的乘积都小于0，所以0也是候选
+            right += 1
+        left = right
+        mul = 1
+    return int(product)
 
 
 if __name__ == '__main__':

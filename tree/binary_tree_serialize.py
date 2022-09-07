@@ -82,3 +82,30 @@ class Codec:
 
         dataList = data.split(',')
         return dfs(dataList)
+
+"""
+设计一个序列化和反序列化 N 叉树的算法。一个 N 叉树是指每个节点都有不超过 N 个孩子节点的有根树。序列化 / 反序列化算法的算法实现没有限制。你只需要保证 N 叉树可以被序列化为一个字符串并且该字符串可以被反序列化成原树结构即可。
+
+来源：力扣（LeetCode）
+链接：https://leetcode.cn/problems/serialize-and-deserialize-n-ary-tree
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+"""
+
+class Codec:
+    def serialize(self, root: 'Node') -> list:
+        if not root: return []
+        data = [root.val]
+        if root.children:
+            for child in root.children:
+                data.append(self.serialize(child))
+        return data
+
+    def deserialize(self, data: list) -> 'Node':
+        if not data: return None
+        root = Node(data[0])
+        root.children = []
+        for i in range(1, len(data)):
+            root.children.append(self.deserialize(data[i]))
+        return root
+
+

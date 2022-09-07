@@ -108,6 +108,19 @@ class Solution:
         backtrack(nums, 0)
         return res
 
+    """
+    给你一个 无重复元素 的整数数组 candidates 和一个目标整数 target ，找出 candidates 中可以使数字和为目标数 target 的 所有 不同组合 ，并以列表形式返回。你可以按 任意顺序 返回这些组合。
+来源：力扣（LeetCode）
+链接：https://leetcode.cn/problems/combination-sum
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+输入：candidates = [2,3,6,7], target = 7
+输出：[[2,2,3],[7]]
+解释：
+2 和 3 可以形成一组候选，2 + 2 + 3 = 7 。注意 2 可以使用多次。
+7 也是一个候选， 7 = 7 。
+仅有这两种组合。
+
+    """
     def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
         path = []
         res = []
@@ -131,6 +144,14 @@ class Solution:
         backtrack(candidates, 0)
         return res
 
+    """
+    给定一个可包含重复数字的序列 nums ，按任意顺序 返回所有不重复的全排列。
+    输入：nums = [1,1,2]
+    输出：
+    [[1,1,2],
+    [1,2,1],
+    [2,1,1]]
+    """
     def permuteUnique(self, nums: List[int]) -> List[List[int]]:
         # res用来存放结果
         if not nums: return []
