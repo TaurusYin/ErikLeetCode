@@ -67,6 +67,18 @@ def reverseParentheses(self, s):
             stack.extend(tmp)
     return ''.join(stack)
 
+"""
+https://leetcode.cn/problems/rotate-array/solution/by-codehard_livefun-ucxj/
+轮转数组
+"""
+def rotate_array(self, nums: List[int], k: int) -> None:
+    """
+    Do not return anything, modify nums in-place instead.
+    """
+    if k := (k % len(nums)):
+        nums[:k], nums[k:] = nums[-k:], nums[:-k]
+
+
 
 """
 给定一个 n × n 的二维矩阵 matrix 表示一个图像。请你将图像顺时针旋转 90 度。
