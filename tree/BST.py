@@ -7,25 +7,30 @@ class Solution:
     """
     https://leetcode.cn/problems/delete-node-in-a-bst/
     """
+    def _deleteNode(self, root: Optional[TreeNode], key: int) -> Optional[TreeNode]:
+        def traversal(root):
+            if not root:
+                return root
+            if root.val > key:
+                root.left = traversal(root.left)
+            elif root.val < key:
+                root.right = traversal(root.right)
+            elif root.val == key:
+                if not root.left and not root.right:
+                    return None
+                if not root.left and root.right:
+                    return root.right
+                if not root.right and root.left:
+                    return root.left
+                if root.left and root.right:
+                    temp = root.left
+                    while (temp.right != None):
+                        temp = temp.right
+                    temp.right = root.right
+                    return root.left
+            return root
 
-    def deleteNode(self, root: Optional[TreeNode], key: int) -> Optional[TreeNode]:
-        '''
-        确认递归函数参数以及返回值：返回更新后剪枝后的当前root节点
-        '''
-        # Base Case
-        if not root: return None
-        # 单层递归逻辑
-        if root.val < key:
-            # 若当前root节点小于左界：只考虑其右子树，用于替代更新后的其本身，抛弃其左子树整体
-            return self.deleteNode(root.right, key)
-        if key < root.val:
-            # 若当前root节点大于右界：只考虑其左子树，用于替代更新后的其本身，抛弃其右子树整体
-            return self.deleteNode(root.left, key)
-        if root.val == key:
-            root.left = self.deleteNode(root.left, key)
-            root.right = self.deleteNode(root.right, key)
-            # 返回更新后的剪枝过的当前节点root
-        return root
+        return traversal(root)
 
     def insertIntoBST(self, root: Optional[TreeNode], val: int) -> Optional[TreeNode]:
         def traversal(root, parent):
@@ -61,6 +66,7 @@ class Solution:
         else:
             return self.searchBST(root.right, val)
 
+    # https://leetcode.cn/problems/validate-binary-search-tree/
     def isValidBST(self, root: Optional[TreeNode]) -> bool:
         def traversal(root: TreeNode):
             if root == None:

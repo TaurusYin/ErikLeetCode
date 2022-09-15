@@ -19,6 +19,7 @@ def maxArea(self, height: List[int]) -> int:
             j -= 1
     return res
 
+
 """
 https://leetcode.cn/problems/maximum-product-subarray/solution/shuang-zhi-zhen-by-wanglongjiang-ier1/
 示例 1:
@@ -48,6 +49,8 @@ right指针向右移动，mul累计left至right指针之间的乘积，直至rig
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 """
+
+
 def maxProduct(self, nums: List[int]) -> int:
     left, right, n = 0, 0, len(nums)
     mul, product = 1, float('-inf')
@@ -180,6 +183,33 @@ def nSumTarget(self, nums, n, start, target):
 
     return res
 
+"""
+滑动窗口左移动 右移动
+https://leetcode.cn/problems/minimum-size-subarray-sum/solution/chang-du-zui-xiao-de-zi-shu-zu-by-leetcode-solutio/
+O(n)
+长度最小子数组
+输入：target = 7, nums = [2,3,1,2,4,3]
+输出：2
+解释：子数组 [4,3] 是该条件下的长度最小的子数组。
+"""
+def minSubArrayLen(self, s: int, nums: List[int]) -> int:
+    if not nums:
+        return 0
+
+    n = len(nums)
+    ans = n + 1
+    start, end = 0, 0
+    total = 0
+    while end < n:
+        total += nums[end]
+        while total >= s:
+            ans = min(ans, end - start + 1)
+            total -= nums[start]
+            start += 1
+        end += 1
+
+    return 0 if ans == n + 1 else ans
+
 
 """
 给定两个大小分别为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。请你找出并返回这两个正序数组的 中位数 。
@@ -232,6 +262,7 @@ findMedian() -> 2
 """
 from sortedcontainers import SortedList
 
+
 class MedianFinder:
 
     def __init__(self):
@@ -274,5 +305,3 @@ class MedianFinder:
 
     def findMedian(self) -> float:
         return (self.left_value + self.right_value) / 2
-
-

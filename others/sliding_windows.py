@@ -183,6 +183,35 @@ def findAnagrams(s: str, p: str) -> List[int]:
 
 findAnagrams(s, p)
 
+
+"""
+滑动窗口左移动 右移动
+https://leetcode.cn/problems/minimum-size-subarray-sum/solution/chang-du-zui-xiao-de-zi-shu-zu-by-leetcode-solutio/
+O(n)
+长度最小子数组
+输入：target = 7, nums = [2,3,1,2,4,3]
+输出：2
+解释：子数组 [4,3] 是该条件下的长度最小的子数组。
+"""
+def minSubArrayLen(self, s: int, nums: List[int]) -> int:
+    if not nums:
+        return 0
+
+    n = len(nums)
+    ans = n + 1
+    start, end = 0, 0
+    total = 0
+    while end < n:
+        total += nums[end]
+        while total >= s:
+            ans = min(ans, end - start + 1)
+            total -= nums[start]
+            start += 1
+        end += 1
+
+    return 0 if ans == n + 1 else ans
+
+
 """
 void slidingWindow(string s) {
     unordered_map<char, int> window;

@@ -1,3 +1,4 @@
+import functools
 from bisect import bisect
 from cmath import inf
 from functools import cache
@@ -111,6 +112,7 @@ class Solution:
     输出：3
     解释：长度最长的公共子数组是 [3,2,1] 。
     """
+
     def findLength(self, nums1: List[int], nums2: List[int]) -> int:
         # dp[i+1][j+1] = dp[i][j] + 1 if nums1[i] == nums[j] else 0
         dp = [[0] * (len(nums2) + 1) for _ in range(len(nums1) + 1)]
@@ -231,7 +233,7 @@ class Solution:
         return help(s, t)
 
     """
-    给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。
+给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。
 你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。
 返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。
 链接：https://leetcode.cn/problems/best-time-to-buy-and-sell-stock
@@ -268,7 +270,7 @@ class Solution:
         return max(res)
 
     """
-    输入：prices = [3,3,5,0,0,3,1,4]
+输入：prices = [3,3,5,0,0,3,1,4]
 输出：6
 解释：在第 4 天（股票价格 = 0）的时候买入，在第 6 天（股票价格 = 3）的时候卖出，这笔交易所能获得利润 = 3-0 = 3 。
      随后，在第 7 天（股票价格 = 1）的时候买入，在第 8 天 （股票价格 = 4）的时候卖出，这笔交易所能获得利润 = 4-1 = 3 。
@@ -277,6 +279,7 @@ class Solution:
 链接：https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iii
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
     """
+
     def maxProfit(self, prices: List[int]) -> int:
         n = len(prices)
         buy1 = buy2 = -prices[0]
@@ -288,7 +291,8 @@ class Solution:
             sell2 = max(sell2, buy2 + prices[i])
         return sell2
 
-    """
+
+"""
     EDit distance
     输入：word1 = "horse", word2 = "ros"
     输出：3
@@ -300,36 +304,179 @@ rose -> ros (删除 'e')
 来源：力扣（LeetCode）
 链接：https://leetcode.cn/problems/edit-distance
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+"""
+
+
+def minDistance(self, word1: str, word2: str) -> int:
+    n = len(word1)
+    m = len(word2)
+
+    # 有一个字符串为空串
+    if n * m == 0:
+        return n + m
+
+    # DP 数组
+    D = [[0] * (m + 1) for _ in range(n + 1)]
+
+    # 边界状态初始化
+    for i in range(n + 1):
+        D[i][0] = i
+    for j in range(m + 1):
+        D[0][j] = j
+
+    # 计算所有 DP 值
+    for i in range(1, n + 1):
+        for j in range(1, m + 1):
+            left = D[i - 1][j] + 1
+            down = D[i][j - 1] + 1
+            left_down = D[i - 1][j - 1]
+            if word1[i - 1] != word2[j - 1]:
+                left_down += 1
+            D[i][j] = min(left, down, left_down)
+
+    return D[n][m]
+
+
+# 直接递归解法，容易超时，python可以加个缓存装饰器，这样也算是将递归转换成迭代的形式了
+# 除了这种方式，还有增加步长来递归，变相的减少了重复计算
+# 还有一种方法，在递归的同时，用数组记忆之前得到的结果，也是减少重复计算
+
+
+class Solution:
+    @functools.lru_cache(100)  # 缓存装饰器
+    def climbStairs(self, n: int) -> int:
+        if n == 1: return 1
+        if n == 2: return 2
+        return self.climbStairs(n - 1) + self.climbStairs(n - 2)
+
+    # 直接DP，新建一个字典或者数组来存储以前的变量，空间复杂度O(n)
+
+
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        dp = {}
+        dp[1] = 1
+        dp[2] = 2
+        for i in range(3, n + 1):
+            dp[i] = dp[i - 1] + dp[i - 2]
+        return dp[n]
+
+    # 还是DP，只不过是只存储前两个元素，减少了空间，空间复杂度O(1)
+
+
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        if n == 1 or n == 2: return n
+        a, b, temp = 1, 2, 0
+        for i in range(3, n + 1):
+            temp = a + b
+            a = b
+            b = temp
+        return temp
+
+    # 直接斐波那契数列的计算公式喽
+
+
+class Solution:
+    def climbStairs(self, n: int) -> int:
+        import math
+        sqrt5 = 5 ** 0.5
+        fibin = math.pow((1 + sqrt5) / 2, n + 1) - math.pow((1 - sqrt5) / 2, n + 1)
+        return int(fibin / sqrt5)
+
+
+"""
+https://mp.weixin.qq.com/s/NZPaFsFrTybO3K3s7p7EVg
+圆环上有10个点，编号为0~9。从0点出发，每次可以逆时针和顺时针走一步，问走n步回到0点共有多少种走法。
+
+输入: 2
+输出: 2
+解释：有2种方案。分别是0->1->0和0->9->0
+如果你之前做过leetcode的70题爬楼梯，则应该比较容易理解：走n步到0的方案数=走n-1步到1的方案数+走n-1步到9的方案数。
+因此，若设dp[i][j]为从0点出发走i步到j点的方案数，则递推式为：
+Image
+ps:公式之所以取余是因为j-1或j+1可能会超过圆环0~9的范围
+"""
+
+
+def backToOrigin(self, n):
+    # 点的个数为10
+    length = 10
+    dp = [[0 for i in range(length)] for j in range(n + 1)]
+    dp[0][0] = 1
+    for i in range(1, n + 1):
+        for j in range(length):
+            # dp[i][j]表示从0出发，走i步到j的方案数
+            dp[i][j] = dp[i - 1][(j - 1 + length) % length] + dp[i - 1][(j + 1) % length]
+    return dp[n][0]
+
+
+"""
+https://leetcode.cn/problems/house-robber/
+输入：[1,2,3,1]
+输出：4
+解释：偷窃 1 号房屋 (金额 = 1) ，然后偷窃 3 号房屋 (金额 = 3)。
+     偷窃到的最高金额 = 1 + 3 = 4 。
+链接：https://leetcode.cn/problems/house-robber
+输入：[2,7,9,3,1]
+输出：12
+解释：偷窃 1 号房屋 (金额 = 2), 偷窃 3 号房屋 (金额 = 9)，接着偷窃 5 号房屋 (金额 = 1)。
+     偷窃到的最高金额 = 2 + 9 + 1 = 12 。
+
+"""
+
+
+def rob(self, nums: List[int]) -> int:
+    if not nums:
+        return 0
+    size = len(nums)
+    if size == 1:
+        return nums[0]
+    dp = [0] * size
+    dp[0] = nums[0]
+    dp[1] = max(nums[0], nums[1])
+    for i in range(2, size):
+        dp[i] = max(dp[i - 2] + nums[i], dp[i - 1])
+    print(dp)
+    return dp[size - 1]
+
+"""
+https://leetcode.cn/problems/house-robber-ii/solution/ji-yu-da-jia-jie-she-1-by-limtcyt-4-hztm/
+情况一：考虑不包含首尾元素
+情况二：考虑包含首元素，不包含尾元素
+情况三：考虑包含尾元素，不包含首元素
+"""
+
+
+def rob(self, nums: List[int]) -> int:
+    '''基于打家劫舍1'''
     """
+    分情况讨论：
+    plan1, 去掉0，剩余部分按不成环考虑
+    plan2，去掉-1，剩余部分按不成环考虑
+    比较二者取其优
+    """
+    def rob_noncicle(cost: list) -> int:
+        '''不成环情况的打家劫舍'''
+        n = len(cost)
+        if n == 0:
+            return 0
+        elif n == 1:
+            return cost[0]
+        elif n == 2:
+            return max(cost)
+        dp = [0] * n
+        dp[0] = cost[0]
+        dp[1] = max(cost[0], cost[1])
+        for i in range(2, n):
+            dp[i] = max(dp[i - 1], dp[i - 2] + cost[i])
+        return dp[n - 1]
 
-    def minDistance(self, word1: str, word2: str) -> int:
-        n = len(word1)
-        m = len(word2)
+    if len(nums) == 1:
+        return nums[0]
+    # 算出两个方案并比较，取其优
+    return max(rob_noncicle(nums[1:]), rob_noncicle(nums[:-1]))
 
-        # 有一个字符串为空串
-        if n * m == 0:
-            return n + m
-
-        # DP 数组
-        D = [[0] * (m + 1) for _ in range(n + 1)]
-
-        # 边界状态初始化
-        for i in range(n + 1):
-            D[i][0] = i
-        for j in range(m + 1):
-            D[0][j] = j
-
-        # 计算所有 DP 值
-        for i in range(1, n + 1):
-            for j in range(1, m + 1):
-                left = D[i - 1][j] + 1
-                down = D[i][j - 1] + 1
-                left_down = D[i - 1][j - 1]
-                if word1[i - 1] != word2[j - 1]:
-                    left_down += 1
-                D[i][j] = min(left, down, left_down)
-
-        return D[n][m]
 
 
 if __name__ == '__main__':

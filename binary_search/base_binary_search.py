@@ -123,7 +123,6 @@ mid 的取值以及区间的选取不同：某个区间可能包含 mid 的值�
 
         return [searchLeft(nums, target), searchRight(nums, target)]
 
-
     """
     https://leetcode.cn/problems/find-minimum-in-rotated-sorted-array/
     寻找旋转排序数组中的最小值
@@ -131,6 +130,7 @@ mid 的取值以及区间的选取不同：某个区间可能包含 mid 的值�
     输出：1
     解释：原数组为 [1,2,3,4,5] ，旋转 3 次得到输入数组。
     """
+
     def findMin(self, nums: List[int]) -> int:
         low, high = 0, len(nums) - 1
         while low < high:
@@ -140,6 +140,27 @@ mid 的取值以及区间的选取不同：某个区间可能包含 mid 的值�
             else:
                 low = pivot + 1
         return nums[low]
+
+
+"""
+https://leetcode.cn/problems/find-peak-element/solution/
+https://leetcode.cn/problems/find-peak-element/solution/162-xun-zhao-feng-zhi-by-likeinsane-zfld/
+我们知道二分查找适用于严格单调函数上找特定值；
+而三分查找则适用于在单峰函数上找极大值（或单谷函数的极小值），也适用于求函数局部的极大/极小值。
+如图，在单峰函数f，范围[l, r]内任取两点lmid，rmid为例：
+若f(lmid)<f(rmid)，则f必在lmid处单调递减，则极大值在[lmid, r]上
+若f(lmid)>f(rmid)，则f必在rmid处单调递减，则极大值在[l, rmid]上
+"""
+
+def findPeakElement(self, nums: List[int]) -> int:
+    left, right = 0, len(nums) - 1
+    while left < right:
+        mid = (left + right) // 2
+        if nums[mid] > nums[mid + 1]:
+            right = mid
+        else:
+            left = mid + 1
+    return left
 
 
 if __name__ == '__main__':

@@ -32,6 +32,8 @@ https://leetcode.cn/problems/merge-intervals/
 时间复杂度：O(n\log n)O(nlogn)，其中 nn 为区间的数量。除去排序的开销，我们只需要一次线性扫描，所以主要的时间开销是排序的 O(n\log n)O(nlogn)。
 空间复杂度：O(\log n)O(logn)，其中 nn 为区间的数量。这里计算的是存储答案之外，使用的额外空间。O(\log n)O(logn) 即为排序所需要的空间复杂度。
 """
+
+
 def merge(self, intervals: List[List[int]]) -> List[List[int]]:
     intervals.sort(key=lambda x: x[0])
 
@@ -45,3 +47,26 @@ def merge(self, intervals: List[List[int]]) -> List[List[int]]:
             merged[-1][1] = max(merged[-1][1], interval[1])
 
     return merged
+
+
+# https://leetcode.cn/problems/interval-list-intersections/solution/qu-jian-lie-biao-de-jiao-ji-by-leetcode/
+def intervalIntersection(self, A: List[List[int]], B: List[List[int]]) -> List[List[int]]:
+    ans = []
+    i = j = 0
+
+    while i < len(A) and j < len(B):
+        # Let's check if A[i] intersects B[j].
+        # lo - the startpoint of the intersection
+        # hi - the endpoint of the intersection
+        lo = max(A[i][0], B[j][0])
+        hi = min(A[i][1], B[j][1])
+        if lo <= hi:
+            ans.append([lo, hi])
+
+        # Remove the interval with the smallest endpoint
+        if A[i][1] < B[j][1]:
+            i += 1
+        else:
+            j += 1
+
+    return ans

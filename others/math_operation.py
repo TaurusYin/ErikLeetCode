@@ -82,6 +82,11 @@ https://leetcode.cn/problems/first-missing-positive/
 输出：3
 给你一个未排序的整数数组 nums ，请你找出其中没有出现的最小的正整数
 O(n)
+其实负数和大于N的数可以忽略，都视为空座位。减少原先为了方便理解而做的操作。
+还有一个坑点是有两个相同的正票（1~N的整数），只有1个人能对号入座，无论谁入座都可以，要避免在两个相同正票互换座位中死循环！所以应以“先到先得”为原则，已经对号入座者不变！
+代码中判断没有对号入座的a!=nums[a-1]不能替换为a!=i+1(等价于nums[i]!=i+1)。否则当nums[i]==a==nums[a-1]时（有两个相同正票）会死循环。
+
+链接：https://leetcode.cn/problems/first-missing-positive/solution/zhao-zuo-wei-de-gu-shi-onyuan-di-jie-fa-by-java_le/
 """
 
 

@@ -1,5 +1,6 @@
 # s[::-1]
 import collections
+from bisect import bisect
 from collections import Counter
 from typing import List
 
@@ -67,17 +68,19 @@ def reverseParentheses(self, s):
             stack.extend(tmp)
     return ''.join(stack)
 
+
 """
 https://leetcode.cn/problems/rotate-array/solution/by-codehard_livefun-ucxj/
 轮转数组
 """
+
+
 def rotate_array(self, nums: List[int], k: int) -> None:
     """
     Do not return anything, modify nums in-place instead.
     """
     if k := (k % len(nums)):
         nums[:k], nums[k:] = nums[-k:], nums[:-k]
-
 
 
 """
@@ -304,12 +307,51 @@ def longestPalindrome(self, s: str) -> str:
     return s[start: end + 1]
 
 
+# https://leetcode.cn/problems/palindrome-partitioning/
+def partition(self, s: str) -> List[List[str]]:
+    result = []
+    path = []
+
+    # 判断是否是回文串
+    def pending_s(s):
+        l, r = 0, len(s) - 1
+        while l < r:
+            if s[l] != s[r]:
+                return False
+            l += 1
+            r -= 1
+        return True
+
+    # 回溯函数，这里的index作为遍历到的索引位置，也作为终止判断的条件
+    def back_track(s, index):
+        # 如果对整个字符串遍历完成，并且走到了这一步，则直接加入result
+        if index == len(s):
+            result.append(path[:])
+            return
+        # 遍历每个子串
+        for i in range(index, len(s)):
+            # 剪枝，因为要求每个元素都是回文串，那么我们只对回文串进行递归，不是回文串的部分直接不care它
+            # 当前子串是回文串
+            if pending_s(s[index: i + 1]):
+                # 加入当前子串到path
+                path.append(s[index: i + 1])
+                # 从当前i+1处重复递归
+                back_track(s, i + 1)
+                # 回溯
+                path.pop()
+
+    back_track(s, 0)
+    return result
+
+
 """
 字符串相加：：
 输入：num1 = "11", num2 = "123"
 输出："134"
 链接：https://leetcode.cn/problems/add-strings
 """
+
+
 # https://leetcode.cn/problems/add-strings/solution/add-strings-shuang-zhi-zhen-fa-by-jyd/
 def addStrings(self, num1: str, num2: str) -> str:
     res = ""
@@ -356,6 +398,8 @@ def multiply(self, num1: str, num2: str) -> str:
 解释：加粗的字符串为已经读入的字符，插入符号是当前读取的字符。
 https://leetcode.cn/problems/string-to-integer-atoi/
 """
+
+
 def myAtoi(self, s: str) -> int:
     flag = 1  # 标记正负号，默认为正
     n = len(s)
@@ -389,6 +433,7 @@ def myAtoi(self, s: str) -> int:
     else:
         return num
 
+
 """
 https://leetcode.cn/problems/decode-ways/solution/jie-ma-fang-fa-by-leetcode-solution-p8np/
 示例 1：
@@ -403,6 +448,8 @@ https://leetcode.cn/problems/decode-ways/solution/jie-ma-fang-fa-by-leetcode-sol
 链接：https://leetcode.cn/problems/decode-ways
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 """
+
+
 def numDecodings(self, s: str) -> int:
     n = len(s)
     f = [1] + [0] * n
@@ -457,10 +504,13 @@ def convertToTitle(self, columnNumber: int) -> str:
 链接：https://leetcode.cn/problems/integer-to-english-words
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 """
+
+
 class Solution:
     def __init__(self):
-        self.nt = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve",
-        "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"]
+        self.nt = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven",
+                   "Twelve",
+                   "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"]
         self.tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"]
         self.t = ["Thousand", "Million", "Billion"]
 
@@ -469,19 +519,22 @@ class Solution:
             if num < 20:
                 return [self.nt[num]]
             elif num < 100:
-                res = [self.tens[num//10]]
+                res = [self.tens[num // 10]]
                 if num % 10:
                     res += helper(num % 10)
                 return res
             elif num < 1000:
-                res = [self.nt[num//100], "Hundred"]
+                res = [self.nt[num // 100], "Hundred"]
                 if num % 100:
-                    res += helper(num%100)
+                    res += helper(num % 100)
                 return res
             for p, w in enumerate(self.t, 1):
                 if num < 1000 ** (p + 1):
-                    return helper(num // 1000 ** p) + [w] + helper(num % 1000 ** p) if num % 1000 ** p else helper(num // 1000 ** p) + [w]
+                    return helper(num // 1000 ** p) + [w] + helper(num % 1000 ** p) if num % 1000 ** p else helper(
+                        num // 1000 ** p) + [w]
+
         return " ".join(helper(num))
+
 
 """
 https://leetcode.cn/problems/decode-string/
@@ -512,7 +565,6 @@ def decodeString(self, s: str) -> str:
     return res
 
 
-
 class Solution:
     def rob(self, root: TreeNode) -> int:
         result = self.rob_tree(root)
@@ -526,6 +578,7 @@ class Solution:
         val1 = node.val + left[1] + right[1]  # 偷当前节点，不能偷子节点
         val2 = max(left[0], left[1]) + max(right[0], right[1])  # 不偷当前节点，可偷可不偷子节点
         return (val1, val2)
+
 
 def maxProduct(self, nums: List[int]) -> int:
     left, right, n = 0, 0, len(nums)
@@ -546,6 +599,7 @@ def maxProduct(self, nums: List[int]) -> int:
         mul = 1
     return int(product)
 
+
 """
 示例 1：
 
@@ -563,6 +617,8 @@ def maxProduct(self, nums: List[int]) -> int:
 链接：https://leetcode.cn/problems/word-break
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 """
+
+
 def wordBreak(self, s: str, wordDict: List[str]) -> bool:
     import functools
     @functools.lru_cache(None)
@@ -576,6 +632,26 @@ def wordBreak(self, s: str, wordDict: List[str]) -> bool:
         return res
 
     return back_track(s)
+
+# https://leetcode.cn/problems/compare-version-numbers/
+def compareVersion(self, version1: str, version2: str) -> int:
+    v1, v2 = version1.split('.'), version2.split('.')
+    v1 = [int(c) for c in v1]
+    v2 = [int(c) for c in v2]
+    l = min(len(v1), len(v2))
+    # 对共同长度部分比较
+    for i in range(l):
+        if v1[i] < v2[i]:
+            return -1
+        elif v1[i] > v2[i]:
+            return 1
+    # 到此步说明共同长度部分两者都相同 所以v1之后如果有非零的 则v1版本更老
+    if len(v1) > l and any(v1[l:]):
+        return 1
+    if len(v2) > l and any(v2[l:]):
+        return -1
+    # 还没有不同之处 则返回0
+    return 0
 
 
 if __name__ == '__main__':

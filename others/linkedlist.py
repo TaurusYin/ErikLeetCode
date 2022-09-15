@@ -23,6 +23,15 @@ def hasCycle(self, head: ListNode) -> bool:
     return True
 
 
+# https://leetcode.cn/problems/linked-list-cycle-ii/
+# 给定一个链表的头节点  head ，返回链表开始入环的第一个节点。 如果链表无环，则返回 null。
+"""
+我们使用两个指针，\textit{fast}fast 与 \textit{slow}slow。它们起始都位于链表的头部。随后，\textit{slow}slow 指针每次向后移动一个位置，而 \textit{fast}fast 指针向后移动两个位置。如果链表中存在环，则 \textit{fast}fast 指针最终将再次与 \textit{slow}slow 指针在环中相遇。
+如下图所示，设链表中环外部分的长度为 aa。\textit{slow}slow 指针进入环后，又走了 bb 的距离与 \textit{fast}fast 相遇。此时，\textit{fast}fast 指针已经走完了环的 nn 圈，因此它走过的总距离为 a+n(b+c)+b=a+(n+1)b+nca+n(b+c)+b=a+(n+1)b+nc。
+链接：https://leetcode.cn/problems/linked-list-cycle-ii/solution/huan-xing-lian-biao-ii-by-leetcode-solution/
+"""
+
+
 def detectCycle(self, head):
     fast, slow = head, head
     while True:
@@ -160,6 +169,8 @@ def mergeKLists(self, lists: List[ListNode]) -> ListNode:
 链接：https://leetcode.cn/problems/partition-list
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 """
+
+
 def partition(self, head: ListNode, x: int) -> ListNode:
     p, q = left, right = ListNode(), ListNode()
     while head:
@@ -365,6 +376,7 @@ def copyRandomList(self, head: 'Node') -> 'Node':
 
     return recursion(head)
 
+
 """
 https://leetcode.cn/problems/reorder-list/
 给定一个单链表 L 的头节点 head ，单链表 L 表示为：
@@ -374,11 +386,13 @@ L0 → L1 → … → Ln - 1 → Ln
 
 L0 → Ln → L1 → Ln - 1 → L2 → Ln - 2 → …
 不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
-
+O(N)
 来源：力扣（LeetCode）
 链接：https://leetcode.cn/problems/reorder-list
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 """
+
+
 class Solution:
     def reorderList(self, head: ListNode) -> None:
         if not head:
@@ -418,3 +432,143 @@ class Solution:
 
             l2.next = l1
             l2 = l2_tmp
+
+
+"""
+给定一个奇数位升序，偶数位降序的链表，将其重新排序。
+
+输入: 1->8->3->6->5->4->7->2->NULL
+输出: 1->2->3->4->5->6->7->8->NULL
+
+1. 按奇偶位置拆分链表，得1->3->5->7->NULL和8->6->4->2->NULL
+2. 反转偶链表，得1->3->5->7->NULL和2->4->6->8->NULL
+3. 合并两个有序链表，得1->2->3->4->5->6->7->8->NULL
+"""
+
+
+class ListNode:
+    def __init__(self, x):
+        self.val = x
+        self.next = None
+
+
+class Solution:
+    def sortOddEvenList(self, head):
+        if not head or not head.next:
+            return head
+        oddList, evenList = self.partition(head)
+        evenList = self.reverse(evenList)
+        return self.merge(oddList, evenList)
+
+    def partition(self, head: ListNode) -> ListNode:
+        evenHead = head.next
+        odd, even = head, evenHead
+        while even and even.next:
+            odd.next = even.next
+            odd = odd.next
+            even.next = odd.next
+            even = even.next
+        odd.next = None
+        return [head, evenHead]
+
+    def reverse(self, head):
+        dumpy = ListNode(-1)
+        p = head
+        while p:
+            temp = p.next
+            p.next = dumpy.next
+            dumpy.next = p
+            p = temp
+        return dumpy.next
+
+    def merge(self, p, q):
+        head = ListNode(-1)
+        r = head
+        while p and q:
+            if p.val <= q.val:
+                r.next = p
+                p = p.next
+            else:
+                r.next = q
+                q = q.next
+            r = r.next
+        if p:
+            r.next = p
+        if q:
+            r.next = q
+        return head.next
+
+
+"""
+运行条件：链表从头遍历到位，逐位相加
+（1）需要保存进位
+（2）需要保存结果
+结束时：
+（1）两个链表只要有一个非空就需要往后进行
+（2）🚩如果链表遍历结束，进位不为0，需要把进位项添加在链表后面
+链接：https://leetcode.cn/problems/add-two-numbers/solution/si-kao-guo-cheng-pythondai-ma-zhu-yi-by-4fl4i/
+"""
+def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
+    # 当前指针，结果链表
+    result = curr = ListNode()
+    # 进位项
+    remainder = 0
+    # 非空满足循环条件
+    while l1 or l2:
+        x = l1.val if l1 else 0
+        y = l2.val if l2 else 0
+        total = x + y + remainder
+        curr.next = ListNode(total % 10)
+        remainder = total // 10
+        # 防止某一链表已经为空，空链表.next会报错
+        if l1: l1 = l1.next
+        if l2: l2 = l2.next
+        curr = curr.next
+
+    if remainder: curr.next = ListNode(remainder)
+    return result.next
+
+"""
+https://leetcode.cn/problems/copy-list-with-random-pointer/
+输入：head = [[7,null],[13,0],[11,4],[10,2],[1,0]]
+输出：[[7,null],[13,0],[11,4],[10,2],[1,0]]
+
+"""
+def copyRandomList(self, head: 'Node') -> 'Node':
+        lookup = {}
+
+        def dfs(head):
+            if not head: return None
+            if head in lookup: return lookup[head]
+            clone = Node(head.val, None, None)
+            lookup[head] = clone
+            clone.next, clone.random = dfs(head.next), dfs(head.random)
+            return clone
+
+        return dfs(head)
+
+"""
+https://leetcode.cn/problems/flatten-binary-tree-to-linked-list/solution/er-cha-shu-zhan-kai-wei-lian-biao-by-leetcode-solu/
+给你二叉树的根结点 root ，请你将它展开为一个单链表：
+
+展开后的单链表应该同样使用 TreeNode ，其中 right 子指针指向链表中下一个结点，而左子指针始终为 null 。
+展开后的单链表应该与二叉树 先序遍历 顺序相同。
+"""
+def flatten(self, root: TreeNode) -> None:
+    preorderList = list()
+
+    def preorderTraversal(root: TreeNode):
+        if root:
+            preorderList.append(root)
+            preorderTraversal(root.left)
+            preorderTraversal(root.right)
+
+    preorderTraversal(root)
+    size = len(preorderList)
+    for i in range(1, size):
+        prev, curr = preorderList[i - 1], preorderList[i]
+        prev.left = None
+        prev.right = curr
+
+
+
