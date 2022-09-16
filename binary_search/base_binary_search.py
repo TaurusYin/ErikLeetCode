@@ -152,6 +152,7 @@ https://leetcode.cn/problems/find-peak-element/solution/162-xun-zhao-feng-zhi-by
 若f(lmid)>f(rmid)，则f必在rmid处单调递减，则极大值在[l, rmid]上
 """
 
+
 def findPeakElement(self, nums: List[int]) -> int:
     left, right = 0, len(nums) - 1
     while left < right:
@@ -161,6 +162,31 @@ def findPeakElement(self, nums: List[int]) -> int:
         else:
             left = mid + 1
     return left
+
+"""
+https://leetcode.cn/problems/squares-of-a-sorted-array/solution/dai-ma-sui-xiang-lu-shu-zu-ti-mu-zong-ji-1rtz/
+双指针法
+数组其实是有序的， 只不过负数平方之后可能成为最大数了。
+那么数组平方的最大值就在数组的两端，不是最左边就是最右边，不可能是中间。
+此时可以考虑双指针法了，i指向起始位置，j指向终止位置。
+定义一个新数组result，和A数组一样的大小，让k指向result数组终止位置
+时间复杂度为O(n)，相对于暴力排序的解法O(n + nlogn)还是提升不少的
+"""
+def sortedSquares(self, nums: List[int]) -> List[int]:
+    n = len(nums)
+    i, j, k = 0, n - 1, n - 1
+    ans = [-1] * n
+    while i <= j:
+        lm = nums[i] ** 2
+        rm = nums[j] ** 2
+        if lm > rm:
+            ans[k] = lm
+            i += 1
+        else:
+            ans[k] = rm
+            j -= 1
+        k -= 1
+    return ans
 
 
 if __name__ == '__main__':

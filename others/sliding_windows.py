@@ -6,6 +6,7 @@ from typing import List
 hash_map = Counter()
 hash_map.most_common()
 
+
 def sliding_windows(s):
     windows, needs = OrderedDict(), OrderedDict()
     left = right = 0
@@ -52,7 +53,10 @@ def findAnagrams(s: str, p: str) -> List[int]:
 
 res = findAnagrams(s, p)
 
-s1 = "ab"; s2 = "eidbaooo"
+s1 = "ab";
+s2 = "eidbaooo"
+
+
 # https://leetcode.cn/problems/permutation-in-string/
 def checkInclusion(self, s1: str, s2: str) -> bool:
     windows, needs = Counter(), Counter(s1)
@@ -183,7 +187,6 @@ def findAnagrams(s: str, p: str) -> List[int]:
 
 findAnagrams(s, p)
 
-
 """
 滑动窗口左移动 右移动
 https://leetcode.cn/problems/minimum-size-subarray-sum/solution/chang-du-zui-xiao-de-zi-shu-zu-by-leetcode-solutio/
@@ -193,6 +196,8 @@ O(n)
 输出：2
 解释：子数组 [4,3] 是该条件下的长度最小的子数组。
 """
+
+
 def minSubArrayLen(self, s: int, nums: List[int]) -> int:
     if not nums:
         return 0
@@ -210,6 +215,41 @@ def minSubArrayLen(self, s: int, nums: List[int]) -> int:
         end += 1
 
     return 0 if ans == n + 1 else ans
+
+
+"""
+https://leetcode.cn/problems/maximum-sum-of-two-non-overlapping-subarrays/solution/qian-zhui-he-hua-ding-chuang-kou-by-ttresaui/
+数组可依据索引j划分为两部分，L在j左边，M在j右边或L在j右边，M在j左边。对于每个j，按照两种情况计算最大的L和M和，并更新答案。
+输入：A = [0,6,5,2,2,5,1,9,4], L = 1, M = 2
+输出：20
+解释：子数组的一种选择中，[9] 长度为 1，[6,5] 长度为 2。
+输入：A = [3,8,1,3,2,1,8,9,0], L = 3, M = 2
+输出：29
+解释：子数组的一种选择中，[3,8,1] 长度为 3，[8,9] 长度为 2。
+"""
+
+
+def maxSumTwoNoOverlap(A, L, M):
+    # 数组可依据索引j划分为两部分，L在i左边，M在i右边或L在i右边，M在i左边。
+    # 对于每个j，按照两种情况计算最大的L和M和，并更新答案
+    n = len(A)
+    # 计算前缀和，方便后边求数组和
+    for i in range(1, n):
+        A[i] += A[i - 1]
+
+    ans = A[L + M - 1]
+    Lmax = A[L - 1]
+    Mmax = A[M - 1]
+    # i代表当前位于右边的数组的末尾索引
+    for i in range(L + M, n):
+        # 当L在M前时，i代表M的最后一个索引,此时M已确定
+        Lmax = max(Lmax, A[i - M] - A[i - M - L])
+        ans1 = Lmax + A[i] - A[i - M]
+        # 当L在M后时，i代表L的最后一个索引，此时L已确定
+        Mmax = max(Mmax, A[i - L] - A[i - L - M])
+        ans2 = Mmax + A[i] - A[i - L]
+        ans = max(ans, ans1, ans2)
+    return ans
 
 
 """

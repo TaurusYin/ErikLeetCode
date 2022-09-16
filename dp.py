@@ -175,101 +175,138 @@ class Solution:
             ans = max(ans, dp[i])
         return ans
 
-    def isSubsequence(self, s: str, t: str) -> bool:
-        """
-          依赖下方，因为s在t里面，与s和t公共子序列不同
-          dp[i+1][j+1] = dp[i][j] + 1 if s[i] == t[j] else dp[i+1][j]
-        """
-        max_value = 0
-        dp = [[0] * (len(t) + 1) for _ in range(len(s) + 1)]
-        for i in range(len(s)):
-            for j in range(len(t)):
-                dp[i + 1][j + 1] = dp[i][j] + 1 if s[i] == t[j] else dp[i + 1][j]
-                max_value = max(dp[i + 1][j + 1], max_value)
-        return max_value == len(s)
+    """
+    字符串成为回文串的最少插入次数
+    给你一个字符串 s ，每一次操作你都可以在字符串的任意位置插入任意字符。
+    请你返回让 s 成为回文串的 最少操作次数 。
+    「回文串」是正读和反读都相同的字符串。
+    输入：s = "zzazz"
+    输出：0
+    解释：字符串 "zzazz" 已经是回文串了，所以不需要做任何插入操作。
+    我们用 dp[i][j] 表示对于字符串 s 的子串 s[i:j]（这里的下标从 0 开始，并且 s[i:j] 包含 s 中的第 i 和第 j 个字符），最少添加的字符数量，使得 s[i:j] 变为回文串。
+    我们从外向内考虑 s[i:j]：
+    如果 s[i] == s[j]，那么最外层已经形成了回文，我们只需要继续考虑 s[i+1:j-1]；
+    如果 s[i] != s[j]，那么我们要么在 s[i:j] 的末尾添加字符 s[i]，要么在 s[i:j] 的开头添加字符 s[j]，才能使得最外层形成回文。如果我们选择前者，那么需要继续考虑 s[i+1:j]；如果我们选择后者，那么需要继续考虑 s[i:j-1]。
+    dp[i][j] = min(dp[i + 1][j] + 1, dp[i][j - 1] + 1)                     if s[i] != s[j]
+    dp[i][j] = min(dp[i + 1][j] + 1, dp[i][j - 1] + 1, dp[i + 1][j - 1])   if s[i] == s[j]
+    O(N**2)，其中 NN 是字符串 s 的长度
+    链接：https://leetcode.cn/problems/minimum-insertion-steps-to-make-a-string-palindrome/solution/rang-zi-fu-chuan-cheng-wei-hui-wen-chuan-de-zui--2/
+    """
 
-    def _numDistinct(self, s: str, t: str) -> int:
-        # rabbit
-        """
-           " r a b b b i t  = s             b a b g b a g
-        "  1 1 1 1 1 1 1 1
-        r  0 1 1 1 1 1 1 1               b  1 1 1 1 1 1 1
-        a  0 0 1 1 1 1 1 1               a  1 2 2 2 2 1 1
-        b  0 0 0 1 2 3 3 3               g  1 1 2 3 1 1 1
-        b  0 0 0 0 1 3 3 3
-        i  0 0 0 0 0 0 3 3
-        t  0 0 0 0 0 0 0 3
+    def minInsertions(self, s: str) -> int:
+        n = len(s)
+        dp = [[0] * n for _ in range(n)]
+        for span in range(2, n + 1):
+            for i in range(n - span + 1):
+                j = i + span - 1
+                dp[i][j] = min(dp[i + 1][j], dp[i][j - 1]) + 1
+                if s[i] == s[j]:
+                    dp[i][j] = min(dp[i][j], dp[i + 1][j - 1])
+        return dp[0][n - 1]
 
-        """
-        n, m = len(s), len(t)
-        dp = [[0] * (n + 1) for _ in range(m + 1)]
-        for i in range(n + 1):
-            dp[0][i] = 1
-        for i in range(0, m):
-            for j in range(0, n):
-                if t[i] == s[j]:
-                    dp[i + 1][j + 1] = dp[i][j] + dp[i + 1][j]
-                else:
-                    dp[i + 1][j + 1] = dp[i + 1][j]
-        return dp[-1][-1]
 
-    def numDistinct(self, s: str, t: str) -> int:
-        # s = "rabbbit", t = "rabbit"
-        @cache
-        def help(s, t):
-            if len(s) < len(t):
-                return 0
-            if not t:
-                return 1
-            if not s:
-                return 0
-            # 相当于双指针，如果当前相等，则可以同时右移（匹配了一个字符），也可以只右移s的指针
-            if s[0] == t[0]:
-                return help(s[1:], t[1:]) + help(s[1:], t)
-            # 如果当前不等，说明不匹配，只能只右移s的指针（舍弃s）
-            else:
-                return help(s[1:], t)
+def isSubsequence(self, s: str, t: str) -> bool:
+    """
+      依赖下方，因为s在t里面，与s和t公共子序列不同
+      dp[i+1][j+1] = dp[i][j] + 1 if s[i] == t[j] else dp[i+1][j]
+    """
+    max_value = 0
+    dp = [[0] * (len(t) + 1) for _ in range(len(s) + 1)]
+    for i in range(len(s)):
+        for j in range(len(t)):
+            dp[i + 1][j + 1] = dp[i][j] + 1 if s[i] == t[j] else dp[i + 1][j]
+            max_value = max(dp[i + 1][j + 1], max_value)
+    return max_value == len(s)
 
-        return help(s, t)
+
+def _numDistinct(self, s: str, t: str) -> int:
+    # rabbit
+    """
+       " r a b b b i t  = s             b a b g b a g
+    "  1 1 1 1 1 1 1 1
+    r  0 1 1 1 1 1 1 1               b  1 1 1 1 1 1 1
+    a  0 0 1 1 1 1 1 1               a  1 2 2 2 2 1 1
+    b  0 0 0 1 2 3 3 3               g  1 1 2 3 1 1 1
+    b  0 0 0 0 1 3 3 3
+    i  0 0 0 0 0 0 3 3
+    t  0 0 0 0 0 0 0 3
 
     """
+    n, m = len(s), len(t)
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+    for i in range(n + 1):
+        dp[0][i] = 1
+    for i in range(0, m):
+        for j in range(0, n):
+            if t[i] == s[j]:
+                dp[i + 1][j + 1] = dp[i][j] + dp[i + 1][j]
+            else:
+                dp[i + 1][j + 1] = dp[i + 1][j]
+    return dp[-1][-1]
+
+
+def numDistinct(self, s: str, t: str) -> int:
+    # s = "rabbbit", t = "rabbit"
+    @cache
+    def help(s, t):
+        if len(s) < len(t):
+            return 0
+        if not t:
+            return 1
+        if not s:
+            return 0
+        # 相当于双指针，如果当前相等，则可以同时右移（匹配了一个字符），也可以只右移s的指针
+        if s[0] == t[0]:
+            return help(s[1:], t[1:]) + help(s[1:], t)
+        # 如果当前不等，说明不匹配，只能只右移s的指针（舍弃s）
+        else:
+            return help(s[1:], t)
+
+    return help(s, t)
+
+
+"""
 给定一个数组 prices ，它的第 i 个元素 prices[i] 表示一支给定股票第 i 天的价格。
 你只能选择 某一天 买入这只股票，并选择在 未来的某一个不同的日子 卖出该股票。设计一个算法来计算你所能获取的最大利润。
 返回你可以从这笔交易中获取的最大利润。如果你不能获取任何利润，返回 0 。
 链接：https://leetcode.cn/problems/best-time-to-buy-and-sell-stock
-    """
+"""
 
-    def _maxProfit(self, prices: List[int]) -> int:
-        # dp[i] = dp[i-1]
-        dp = []
-        dp.append(prices[0])
-        profit = 0
-        for i in range(1, len(prices)):
-            dp.append(min(dp[i - 1], prices[i]))
-            profit = max(profit, prices[i] - dp[i])
-        return profit
 
-    def _maxProfit(self, prices: List[int]) -> int:
-        low = float("inf")
-        result = 0
-        for i in range(len(prices)):
-            low = min(low, prices[i])  # 取最左最小价格
-            result = max(result, prices[i] - low)  # 直接取最大区间利润
-        return result
+def _maxProfit(self, prices: List[int]) -> int:
+    # dp[i] = dp[i-1]
+    dp = []
+    dp.append(prices[0])
+    profit = 0
+    for i in range(1, len(prices)):
+        dp.append(min(dp[i - 1], prices[i]))
+        profit = max(profit, prices[i] - dp[i])
+    return profit
 
-    def _maxProfit(self, prices: List[int]) -> int:
-        # dp[i] = dp[i-1] + max(prices[i] - prices[i-1], 0)
-        # dp[i] = min(dp[i-1], prices[i])
-        res = [0]
-        mem = []
-        mem.append(prices[0])
-        for i in range(1, len(prices)):
-            min_value = min(mem[i - 1], prices[i])
-            mem.append(min_value)
-            res.append(prices[i] - min_value)
-        return max(res)
 
-    """
+def _maxProfit(self, prices: List[int]) -> int:
+    low = float("inf")
+    result = 0
+    for i in range(len(prices)):
+        low = min(low, prices[i])  # 取最左最小价格
+        result = max(result, prices[i] - low)  # 直接取最大区间利润
+    return result
+
+
+def _maxProfit(self, prices: List[int]) -> int:
+    # dp[i] = dp[i-1] + max(prices[i] - prices[i-1], 0)
+    # dp[i] = min(dp[i-1], prices[i])
+    res = [0]
+    mem = []
+    mem.append(prices[0])
+    for i in range(1, len(prices)):
+        min_value = min(mem[i - 1], prices[i])
+        mem.append(min_value)
+        res.append(prices[i] - min_value)
+    return max(res)
+
+
+"""
 输入：prices = [3,3,5,0,0,3,1,4]
 输出：6
 解释：在第 4 天（股票价格 = 0）的时候买入，在第 6 天（股票价格 = 3）的时候卖出，这笔交易所能获得利润 = 3-0 = 3 。
@@ -278,18 +315,19 @@ class Solution:
 来源：力扣（LeetCode）
 链接：https://leetcode.cn/problems/best-time-to-buy-and-sell-stock-iii
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
-    """
+"""
 
-    def maxProfit(self, prices: List[int]) -> int:
-        n = len(prices)
-        buy1 = buy2 = -prices[0]
-        sell1 = sell2 = 0
-        for i in range(1, n):
-            buy1 = max(buy1, -prices[i])
-            sell1 = max(sell1, buy1 + prices[i])
-            buy2 = max(buy2, sell1 - prices[i])
-            sell2 = max(sell2, buy2 + prices[i])
-        return sell2
+
+def maxProfit(self, prices: List[int]) -> int:
+    n = len(prices)
+    buy1 = buy2 = -prices[0]
+    sell1 = sell2 = 0
+    for i in range(1, n):
+        buy1 = max(buy1, -prices[i])
+        sell1 = max(sell1, buy1 + prices[i])
+        buy2 = max(buy2, sell1 - prices[i])
+        sell2 = max(sell2, buy2 + prices[i])
+    return sell2
 
 
 """
@@ -440,6 +478,7 @@ def rob(self, nums: List[int]) -> int:
     print(dp)
     return dp[size - 1]
 
+
 """
 https://leetcode.cn/problems/house-robber-ii/solution/ji-yu-da-jia-jie-she-1-by-limtcyt-4-hztm/
 情况一：考虑不包含首尾元素
@@ -456,6 +495,7 @@ def rob(self, nums: List[int]) -> int:
     plan2，去掉-1，剩余部分按不成环考虑
     比较二者取其优
     """
+
     def rob_noncicle(cost: list) -> int:
         '''不成环情况的打家劫舍'''
         n = len(cost)
@@ -476,7 +516,6 @@ def rob(self, nums: List[int]) -> int:
         return nums[0]
     # 算出两个方案并比较，取其优
     return max(rob_noncicle(nums[1:]), rob_noncicle(nums[:-1]))
-
 
 
 if __name__ == '__main__':

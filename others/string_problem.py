@@ -654,6 +654,38 @@ def compareVersion(self, version1: str, version2: str) -> int:
     return 0
 
 
+"""
+字符串成为回文串的最少插入次数
+给你一个字符串 s ，每一次操作你都可以在字符串的任意位置插入任意字符。
+请你返回让 s 成为回文串的 最少操作次数 。
+「回文串」是正读和反读都相同的字符串。
+输入：s = "zzazz"
+输出：0
+解释：字符串 "zzazz" 已经是回文串了，所以不需要做任何插入操作。
+我们用 dp[i][j] 表示对于字符串 s 的子串 s[i:j]（这里的下标从 0 开始，并且 s[i:j] 包含 s 中的第 i 和第 j 个字符），最少添加的字符数量，使得 s[i:j] 变为回文串。
+我们从外向内考虑 s[i:j]：
+如果 s[i] == s[j]，那么最外层已经形成了回文，我们只需要继续考虑 s[i+1:j-1]；
+如果 s[i] != s[j]，那么我们要么在 s[i:j] 的末尾添加字符 s[i]，要么在 s[i:j] 的开头添加字符 s[j]，才能使得最外层形成回文。如果我们选择前者，那么需要继续考虑 s[i+1:j]；如果我们选择后者，那么需要继续考虑 s[i:j-1]。
+dp[i][j] = min(dp[i + 1][j] + 1, dp[i][j - 1] + 1)                     if s[i] != s[j]
+dp[i][j] = min(dp[i + 1][j] + 1, dp[i][j - 1] + 1, dp[i + 1][j - 1])   if s[i] == s[j]
+O(N**2)，其中 NN 是字符串 s 的长度
+链接：https://leetcode.cn/problems/minimum-insertion-steps-to-make-a-string-palindrome/solution/rang-zi-fu-chuan-cheng-wei-hui-wen-chuan-de-zui--2/
+"""
+class Solution:
+    def minInsertions(self, s: str) -> int:
+        n = len(s)
+        dp = [[0] * n for _ in range(n)]
+        for span in range(2, n + 1):
+            for i in range(n - span + 1):
+                j = i + span - 1
+                dp[i][j] = min(dp[i + 1][j], dp[i][j - 1]) + 1
+                if s[i] == s[j]:
+                    dp[i][j] = min(dp[i][j], dp[i + 1][j - 1])
+        return dp[0][n - 1]
+
+
+
+
 if __name__ == '__main__':
     rotate_clockwise(matrix=[[1, 2, 3], [4, 5, 6], [7, 8, 9]])
     rotate_non_clockwise(matrix=[[1, 2, 3], [4, 5, 6], [7, 8, 9]])

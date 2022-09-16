@@ -273,3 +273,63 @@ def grayCode(self, n: int) -> List[int]:
     return ans
 
 
+"""
+给定两个整数，分别表示分数的分子 numerator 和分母 denominator，以 字符串形式返回小数 。
+如果小数部分为循环小数，则将循环的部分括在括号内
+输入：numerator = 1, denominator = 2
+输出："0.5"
+输入：numerator = 4, denominator = 333
+输出："0.(012)"
+链接：https://leetcode.cn/problems/fraction-to-recurring-decimal/solution/by-isuxiz-59ks/
+时空复杂度
+时空复杂度均为O(L)，其中L为答案字符串的长度
+其实这里应该有一个公式能把L用输入的两数的值M，N来表示的，但是我没想出来 ORZ
+"""
+
+def fractionToDecimal(self, numerator: int, denominator: int) -> str:
+    # 预处理
+    is_negative = numerator * denominator < 0
+    numerator = abs(numerator)
+    denominator = abs(denominator)
+
+    # 得到整数商
+    integer_quotient = str(numerator // denominator)
+    numerator %= denominator
+    numerator *= 10
+
+    # 求小数部分
+    ans = deque()
+    # 存第一次见到这个要处理的数的轮次
+    # 即对应的那位答案在ans中的下标
+    seen_numbers = {}
+    i = 0
+    while numerator:
+        # 如果当前要处理的数出现过
+        # 说明现在求的这一位是下一个循环节的开头，没有必要求了
+        if numerator in seen_numbers:
+            break
+        seen_numbers[numerator] = i
+        ans.append(str(numerator // denominator))
+        numerator %= denominator
+        numerator *= 10
+        i += 1
+
+    # 如果结束时余数非零
+    # 说明是检测到存在循环节才退出循环的
+    # 那么添加括号
+    if numerator:
+        ans.insert(seen_numbers[numerator], '(')
+        ans.append(')')
+
+    # 如果小数部分有结果，那么添加小数点
+    if ans:
+        ans.appendleft('.')
+
+    # 添加整数部分
+    ans.appendleft(integer_quotient)
+
+    # 添加符号
+    if is_negative:
+        ans.appendleft('-')
+
+    return "".join(ans)
