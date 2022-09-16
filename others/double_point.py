@@ -104,7 +104,13 @@ def removeElement(self, nums: List[int], val: int) -> int:
     return b
 
 
-# https://leetcode.cn/problems/two-sum-ii-input-array-is-sorted/
+"""
+输入：numbers = [2,7,11,15], target = 9
+输出：[1,2]
+解释：2 与 7 之和等于目标数 9 。因此 index1 = 1, index2 = 2 。返回 [1, 2] 。
+有序
+链接：https://leetcode.cn/problems/two-sum-ii-input-array-is-sorted
+"""
 def twoSum(self, numbers: List[int], target: int) -> List[int]:
     low, high = 0, len(numbers) - 1
     while low < high:
@@ -115,8 +121,25 @@ def twoSum(self, numbers: List[int], target: int) -> List[int]:
             low += 1
         else:
             high -= 1
-
     return [-1, -1]
+
+"""
+https://leetcode.cn/problems/two-sum/solution/liang-shu-zhi-he-by-leetcode-solution/
+输入：nums = [2,7,11,15], target = 9
+输出：[0,1]
+解释：因为 nums[0] + nums[1] == 9 ，返回 [0, 1] 。
+
+链接：https://leetcode.cn/problems/two-sum
+"""
+def twoSum(self, nums: List[int], target: int) -> List[int]:
+    hashtable = dict()
+    for i, num in enumerate(nums):
+        if target - num in hashtable:
+            return [hashtable[target - num], i]
+        hashtable[nums[i]] = i
+    return []
+
+
 
 
 # https://leetcode.cn/problems/3sum/solution/by-s1ne-p3qs/

@@ -111,6 +111,42 @@ def mergekSortedArrays(self, arrays):
     return result
 
 
+"""
+给你两个按 非递减顺序 排列的整数数组 nums1 和 nums2，另有两个整数 m 和 n ，分别表示 nums1 和 nums2 中的元素数目。
+类似归并排序, 不过空间规定好了在nums1里, 所以为了防止数据被覆盖, 倒序归并即可
+利用哨兵可以简化代码的写法
+https://leetcode.cn/problems/merge-sorted-array/solution/by-isuxiz-2knu/
+O(m+n)
+O(1)
+注意：最终，合并后数组不应由函数返回，而是存储在数组 nums1 中。为了应对这种情况，nums1 的初始长度为 m + n，其中前 m 个元素表示应合并的元素，后 n 个元素为 0 ，应忽略。nums2 的长度为 n 。
+输入：nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3
+输出：[1,2,2,3,5,6]
+解释：需要合并 [1,2,3] 和 [2,5,6] 。
+合并结果是 [1,2,2,3,5,6] ，其中斜体加粗标注的为 nums1 中的元素。
+"""
+
+def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
+    """
+    Do not return anything, modify nums1 in-place instead.
+    """
+    i, j = m - 1, n - 1
+    curr = m + n - 1
+    while curr >= 0:
+        num1 = nums1[i] if i >= 0 else float('-inf')
+        num2 = nums2[j] if j >= 0 else float('-inf')
+        if num1 >= num2:
+            nums1[curr] = num1
+            i -= 1
+        else:
+            nums1[curr] = num2
+            j -= 1
+        curr -= 1
+    return
+
+
+
+
+
 if __name__ == '__main__':
     nums = [100, 2, 3, 4, 10, 40]
     nums = [1, 3, 2, 3, 1]
