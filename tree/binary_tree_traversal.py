@@ -9,6 +9,8 @@
 """
 
 from typing import List, Optional
+
+from others.linkedlist import ListNode
 from utils.base_decorator import CommonLogger
 
 a = [1, 3, 4]
@@ -271,7 +273,7 @@ class Solution:
                 if cur.right:
                     que.append(cur.right)
             result.append(st)
-
+        # zigzag order : result.append(st) if count % 2 == 1 else result.append(st[::-1])
         return result
 
     """
@@ -444,6 +446,28 @@ def isSubtree(self, root: TreeNode, subRoot: TreeNode) -> bool:
     return self.isSameTree(root, subRoot) or self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot)
 
 
+"""
+输入：head = [4,2,8], root = [1,4,4,null,2,2,null,1,null,6,8,null,null,null,null,1,3]
+输出：true
+是不是链表的子路径
+链接：https://leetcode.cn/problems/linked-list-in-binary-tree
+"""
+def dfs(self, head: ListNode, rt: TreeNode) -> bool:
+    if not head:
+        return True
+    if not rt:
+        return False
+    if rt.val != head.val:
+        return False
+    return self.dfs(head.next, rt.left) or self.dfs(head.next, rt.right)
+
+
+def isSubPath(self, head: ListNode, root: TreeNode) -> bool:
+    if not root:
+        return False
+    return self.dfs(head, root) or self.isSubPath(head, root.left) or self.isSubPath(head, root.right)
+
+
 def minDepth(self, root: TreeNode) -> int:
     if not root:
         return 0
@@ -481,6 +505,8 @@ https://leetcode.cn/problems/check-completeness-of-a-binary-tree/solution/er-cha
 输出：true
 解释：最后一层前的每一层都是满的（即，结点值为 {1} 和 {2,3} 的两层），且最后一层中的所有结点（{4,5,6}）都尽可能地向左。
 """
+
+
 def isCompleteTree(self, root):
     nodes = [(root, 1)]
     i = 0

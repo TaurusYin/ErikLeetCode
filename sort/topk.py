@@ -51,7 +51,7 @@ def topKFrequent(self, nums: List[int], k: int) -> List[int]:
     return [item[1] for item in heapq.nlargest(k, heap)]
 
 
-def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+def topKFrequent(nums: List[int], k: int) -> List[int]:
     count = collections.Counter(nums)
     heap = []
     for key, val in count.items():
@@ -65,8 +65,8 @@ def topKFrequent(self, nums: List[int], k: int) -> List[int]:
 
 res = topKFrequent(nums=[1, 1, 1, 2, 2, 3], k=2)
 
-
-def findKthLargest(self, nums: List[int], k: int) -> int:
+# O(N*logK)
+def findKthLargest(nums: List[int], k: int) -> int:
     #   构造大小为 k 的小顶堆
     heap = [x for x in nums[:k]]
     heapq.heapify(heap)
@@ -78,7 +78,7 @@ def findKthLargest(self, nums: List[int], k: int) -> int:
     return heap[0]
 
 #   https://leetcode.cn/problems/kth-largest-element-in-an-array/solution/pythonpython3-top-kwo-yong-si-chong-fang-y2t2/
-def findKthLargest(self, nums: List[int], k: int) -> int:
+def _findKthLargest(nums: List[int], k: int) -> int:
     heap = []
     for num in nums:
         # 如果堆长度没到k，无脑塞
@@ -90,6 +90,7 @@ def findKthLargest(self, nums: List[int], k: int) -> int:
                 heapq.heappop(heap)
                 heapq.heappush(heap, num)
     return heapq.heappop(heap)
+findKthLargest(nums=[4, 10, 11, 29, 2, 3, 101], k=5)
 
 
 def _findKthLargest(nums: List[int], k: int) -> int:

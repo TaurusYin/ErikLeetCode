@@ -90,7 +90,12 @@ class Solution:
         root.left = self.buildTree_pre_post(preorder_left, postorder_left)
         root.right = self.buildTree_pre_post(preorder_right, postorder_right)
         return root
-
+    """
+    给定一个不重复的整数数组 nums 。 最大二叉树 可以用下面的算法从 nums 递归地构建:创建一个根节点，其值为 nums 中的最大值。
+递归地在最大值 左边 的 子数组前缀上 构建左子树。
+递归地在最大值 右边 的 子数组后缀上 构建右子树。
+链接：https://leetcode.cn/leetbook/read/pu-tong-shu/nsyblm/
+    """
     def constructMaximumBinaryTree(self, nums: List[int]) -> Optional[TreeNode]:
         # nums = [3,2,1,6,0,5] [3,2,1,6,0,5] 中的最大值是 6 ，左边部分是 [3,2,1] ，右边部分是 [0,5] 。
         if not nums:
@@ -116,6 +121,21 @@ class Solution:
         print('max:{} left:{},right:{}'.format(max_value, left, right))
         root.left = self.constructMaximumBinaryTree(left)
         root.right = self.constructMaximumBinaryTree(right)
+        return root
+
+
+    """
+    case1：如果val大于root.val，则root就是val节点的左子树节点。
+    case2：如果val大于非root.val，则非root就是val节点的左子树节点，并且非root节点的原父节点的右子树更新为val节点。
+    case3：如果val小于最底层的叶子节点，则val节点就作为该叶子节点的右子树节点。
+链接：https://leetcode.cn/problems/maximum-binary-tree-ii/solution/by-muse-77-zkfg/
+    """
+    def insertIntoMaxTree(self, root: Optional[TreeNode], val: int) -> Optional[TreeNode]:
+        if not root:
+            return TreeNode(val)
+        if root.val < val:
+            return TreeNode(val, root, None)
+        root.right = self.insertIntoMaxTree(root.right, val)
         return root
 
     def mergeTrees(self, root1: Optional[TreeNode], root2: Optional[TreeNode]) -> Optional[TreeNode]:

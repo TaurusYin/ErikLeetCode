@@ -109,3 +109,34 @@ class Codec:
         return root
 
 
+"""
+给定一棵二叉树的「先序遍历」和「中序遍历」可以恢复这颗二叉树。给定一棵二叉树的「后序遍历」和「中序遍历」也可以恢复这颗二叉树。而对于二叉搜索树，给定「先序遍历」或者「后序遍历」，对其经过排序即可得到「中序遍历」。因此，仅对二叉搜索树做「先序遍历」或者「后序遍历」，即可达到序列化和反序列化的要求。此题解采用「后序遍历」的方法。
+序列化时，只需要对二叉搜索树进行后序遍历，再将数组编码成字符串即可。
+反序列化时，需要先将字符串解码成后序遍历的数组。在将后序遍历的数组恢复成二叉搜索树时，不需要先排序得到中序遍历的数组再根据中序和后序遍历的数组来恢复二叉树，而可以根据有序性直接由后序遍历的数组恢复二叉搜索树。后序遍历得到的数组中，根结点的值位于数组末尾，左子树的节点均小于根节点的值，右子树的节点均大于根节点的值，可以根据这些性质设计递归函数恢复二叉搜索树。
+"""
+class Codec:
+    def serialize(self, root: TreeNode) -> str:
+        arr = []
+        def postOrder(root: TreeNode) -> None:
+            if root is None:
+                return
+            postOrder(root.left)
+            postOrder(root.right)
+            arr.append(root.val)
+        postOrder(root)
+        return ' '.join(map(str, arr))
+
+    def deserialize(self, data: str) -> TreeNode:
+        arr = list(map(int, data.split()))
+        def construct(lower: int, upper: int) -> TreeNode:
+            if arr == [] or arr[-1] < lower or arr[-1] > upper:
+                return None
+            val = arr.pop()
+            root = TreeNode(val)
+            root.right = construct(val, upper)
+            root.left = construct(lower, val)
+            return root
+        return construct(-inf, inf)
+
+
+

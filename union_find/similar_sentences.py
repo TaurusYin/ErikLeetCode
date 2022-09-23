@@ -19,9 +19,9 @@ class UnionFind:
     def union(self, x, y):
         root_x = self.find(x)
         root_y = self.find(y)
-        if root_x == root_y:
+        if root_x == root_y:  # 找到环
             return True
-        if root_x <= root_y:
+        if root_x <= root_y:  # 没找到环，更新两个节点的parent为其中最小值
             root_x, root_y = root_y, root_x
         self.root[root_x] = root_y
         self.size[root_y] += self.size[root_x]
@@ -49,6 +49,18 @@ class UnionFind:
             size[self.find(i)] = self.size[self.find(i)]
         return size
 
+
+def findRedundantConnection(edges):
+    """
+    :type edges: List[List[int]]
+    :rtype: List[int]
+    """
+    union_set = UnionFind(len(edges))
+    for i in range(len(edges)):
+        if union_set.union(edges[i][0] - 1, edges[i][1] - 1):  # 减1是为了和并查集的索引保持一致
+            return edges[i]
+
+res = findRedundantConnection(edges = [[1,2], [1,3], [2,3]])
 
 class Solution:
     def areSentencesSimilar(self, words1, words2, pairs):

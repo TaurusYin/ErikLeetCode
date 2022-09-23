@@ -86,8 +86,27 @@ def generateParenthesis(self, n: int) -> List[str]:
 遍历 aa 与 bb 的所有可能性并拼接，即可得到所有长度为 2n2n 的括号序列。
 为了节省计算时间，我们在每次 \textit{generate}(i)generate(i) 函数返回之前，把返回值存储起来，下次再调用 \textit{generate}(i)generate(i) 时可以直接返回，不需要再递归计算。
 
+卡特兰数 (1/n+1)*(2n/n)
 链接：https://leetcode.cn/problems/generate-parentheses/solution/gua-hao-sheng-cheng-by-leetcode-solution/
 """
+
+def generateParenthesis(self, n: int) -> List[str]:
+    ans = []
+    def backtrack(S, left, right):
+        if len(S) == 2 * n:
+            ans.append(''.join(S))
+            return
+        if left < n:
+            S.append('(')
+            backtrack(S, left + 1, right)
+            S.pop()
+        if right < left:
+            S.append(')')
+            backtrack(S, left, right + 1)
+            S.pop()
+
+    backtrack([], 0, 0)
+    return ans
 
 
 @lru_cache(None)
