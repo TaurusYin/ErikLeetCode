@@ -143,3 +143,8 @@ def rand10(self):
     while num > 40:
         num = (rand7() - 1) * 7 + rand7()
     return 1 + (num - 1) % 10
+
+
+import random
+
+
