@@ -1,7 +1,6 @@
 import time
-import pandas as pd
 
-from interview.quant import MovingAverage
+from interview.kaidu.ma_solution import MovingAverage
 
 mock_data = [
     (1360250000000.00, 15.07),
@@ -42,12 +41,12 @@ if __name__ == '__main__':
     file_path = '/Users/yineric/Downloads/archive/all_stocks_5yr.csv'
     t = pd.read_csv(file_path, usecols=['date', 'open']).head(2)
     '''
-    from interview.mock_case import mock_data
+    from interview.kaidu.mock_case import mock_data
     num_bin = 10
     window = 15.0
     ma = MovingAverage(num_bin=num_bin, window=window)
     start_time = time.time()
-    ma.MockTask(mock_data=mock_data[:2])
+    ma.MockTask(mock_data=mock_data[:20])
     res = ma.Get(current_ts=1360250000001.99)
     end_time = time.time()
     print('time consume: {}'.format(end_time - start_time))
