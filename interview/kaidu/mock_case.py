@@ -40,7 +40,7 @@ mock_data = [
 
 class CaseTest(unittest.TestCase):
     # 测试Window窗口内sum值,用于测试队窗口移动过程中，过期元素时序粒度不均匀与插入元素时序粒度不均匀两种情况
-    def _test_window_sum(self):
+    def test_window_strategy(self):
         num_bin = 100
         window = 15.0
         ma = MovingAverage(num_bin=num_bin, window=window)
@@ -48,13 +48,13 @@ class CaseTest(unittest.TestCase):
         actual_window_sum = sum(list(map(lambda x: x[1], mock_data[11:-1])))
         # 按照前一个股价插值, 补了6个值
         actual_window_sum += 15.98 * (1360250000030.00 - 1360250000023.00 - 1)
-        ma.MockTask(mock_data=mock_data)
+        ma.mock_task(mock_data=mock_data)
         # 对比实际值与窗口值
         assert abs(ma.window_sum - actual_window_sum) < 0.000000000001
         self.assertAlmostEqual(ma.window_sum, actual_window_sum)
 
     # 测试Window窗口内mean值
-    def _test_mean(self):
+    def test_mean_function(self):
         num_bin = 100
         window = 15.0
         ma = MovingAverage(num_bin=num_bin, window=window)
@@ -63,19 +63,20 @@ class CaseTest(unittest.TestCase):
         # 按照前一个股价插值, 补了6个值
         actual_window_sum += 15.98 * (1360250000030.00 - 1360250000023.00 - 1)
         actual_window_mean = actual_window_sum / (len(mock_data[11:-1]) + 6)
-        ma.MockTask(mock_data=mock_data)
-        assert abs(ma.prev_mean - actual_window_mean) < 0.000000000001
-        self.assertAlmostEqual(ma.prev_mean, actual_window_mean)
+        ma.mock_task(mock_data=mock_data)
+        get_mean_value = ma.get(current_ts=1360250000030.0)
+        assert abs(get_mean_value - actual_window_mean) < 0.000000000001
+        self.assertAlmostEqual(get_mean_value, actual_window_mean)
 
-    def test_num_bin(self):
+    def test_memory_strategy(self):
         num_bin = 10
         window = 15.0
         ma = MovingAverage(num_bin=num_bin, window=window)
-        ma.MockTask(mock_data=mock_data)
+        ma.mock_task(mock_data=mock_data)
         print()
 
 if __name__ == '__main__':
     ct = CaseTest()
-    ct._test_num_bin()
+    ct.test_mean()
 
 
