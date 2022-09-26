@@ -161,7 +161,8 @@ class MovingAverage:
         """
         valid_interval = end_ts - start_ts  # 默认在交易时间范围内
         """
-        具体逻辑由于题目未给出非交易时间段的信息，扣减逻辑比较简单，暂不做具体实现。
+        具体逻辑由于题目未给出非交易时间段的信息，扣减逻辑比较简单，
+        扣除与非交易时间段重叠部分即可，暂不做具体实现。
         valid_interval = self.cal_reduced_interval(start_ts, end_ts)
         """
         return valid_interval
