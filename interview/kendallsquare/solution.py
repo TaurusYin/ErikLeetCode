@@ -35,7 +35,7 @@ class MovingAverage:
         当知道了interval就可以算出，前一个时间戳的元素实际的股价积分面积，此方法解决了考虑数据间隔变化极端的情况下的鲁棒性
         """
         try:
-            if self.queue == 0:
+            if len(self.queue) == 0:
                 return 0
             else:
                 # 线程安全加读写锁的读锁
