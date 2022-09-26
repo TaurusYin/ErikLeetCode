@@ -45,7 +45,10 @@ class MovingAverage:
                 head_ts, tail_ts, tail_value = self.queue[0][0], self.queue[-1][0], self.queue[-1][1]
                 interval = current_ts - tail_ts
                 sum_value = self.window_sum + interval * tail_value
-                mean_value = sum_value / (current_ts - head_ts)
+                # 特殊跨交易日的情况，需要剪掉无效交易时间(节假日，非交易时间的股价积分面积)
+                # reduced_interval: 需要扣减的非交易时间的时间区间，reduced_sum_value 需要扣减
+                valid_interval = self.get_valid_transaction_interval(head_ts, current_ts)
+                mean_value = sum_value / valid_interval
                 read_marker.release()
                 return mean_value
         except Exception as e:
@@ -72,11 +75,12 @@ class MovingAverage:
         初始化操作：
         1. 每一次新元素到达更新前一个时间戳的股价面积积分 current_area
         2. 忘队尾部插入元素 elem = [timestamp, value, None] ， 第三个股价积分面积area初始化为None
+        3. 计算股价积分面积需要确定有效交易interval，通过get_valid_transaction_interval排除非交易时间段
         """
         if len(self.queue) == 0:
             prev_area = 0
         else:
-            interval = timestamp - self.queue[-1][0]
+            interval = self.get_valid_transaction_interval(self.queue[-1][0], timestamp)
             prev_value = self.queue[-1][1]
             prev_area = prev_value * interval
             # 每一次新元素到达更新前一个时间戳的股价面积积分 current_area
@@ -147,6 +151,20 @@ class MovingAverage:
                     self.queue[prev_index + 2][0] - self.queue[prev_index][0])
             # 删除当前elem元素
             self.queue.remove(elem)
+
+    def get_valid_transaction_interval(self, start_ts: float, end_ts: float) -> float:
+        """
+        每天交易时间窗口外，跨交易日的SMA计算，盘前盘后无交易的时间包括节假日周末的时间，
+        此类情况在交易日之间的间隔时间区间不能用股价面积积分的方式，需要在交易结束与交易开始时间做特殊处理。
+        :param interval: 在该interval范围内窗口区间(head_ts, tail_ts)内, 跨非交易时间需要扣减非交易时间段的时间长度
+        :return: 有效交易时间长度
+        """
+        valid_interval = end_ts - start_ts  # 默认在交易时间范围内
+        """
+        具体逻辑由于题目未给出非交易时间段的信息，扣减逻辑比较简单，暂不做具体实现。
+        valid_interval = self.cal_reduced_interval(start_ts, end_ts)
+        """
+        return valid_interval
 
     # 模拟流任务
     def mock_task(self, mock_data):
