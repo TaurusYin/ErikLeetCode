@@ -1,7 +1,6 @@
-import time
 import unittest
 
-from interview.kaidu.ma_solution import MovingAverage
+from solution import MovingAverage
 
 mock_data = [
     (1360250000000.00, 15.07),
@@ -52,6 +51,7 @@ class CaseTest(unittest.TestCase):
         # 对比实际值与窗口值
         assert abs(ma.window_sum - actual_window_sum) < 0.000000000001
         self.assertAlmostEqual(ma.window_sum, actual_window_sum)
+        print('窗口内队列窗口计算sum值:{} 与实际计sum值:{} 相等'.format(ma.window_sum, actual_window_sum))
 
     # 测试Window窗口内mean值
     def test_mean_function(self):
@@ -67,16 +67,17 @@ class CaseTest(unittest.TestCase):
         get_mean_value = ma.get(current_ts=1360250000030.0)
         assert abs(get_mean_value - actual_window_mean) < 0.000000000001
         self.assertAlmostEqual(get_mean_value, actual_window_mean)
+        print('窗口内队列计算均值:{} 与实际计算均值:{} 相等'.format(get_mean_value, actual_window_mean))
 
     def test_memory_strategy(self):
         num_bin = 10
         window = 15.0
         ma = MovingAverage(num_bin=num_bin, window=window)
         ma.mock_task(mock_data=mock_data)
-        print()
+        assert len(ma.queue) < num_bin
+        print('队列里的元素个数:{} 在内存 num_bin:{} 范围之内'.format(len(ma.queue), num_bin))
+
 
 if __name__ == '__main__':
     ct = CaseTest()
     ct.test_mean()
-
-

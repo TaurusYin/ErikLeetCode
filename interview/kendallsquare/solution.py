@@ -34,31 +34,38 @@ class MovingAverage:
         股价积分面积 = 前一个元素的股价 * interval ,即不同的当前时间戳均值会随传入的当前时间戳的变化而变化
         当知道了interval就可以算出，前一个时间戳的元素实际的股价积分面积，此方法解决了考虑数据间隔变化极端的情况下的鲁棒性
         """
-        if self.queue == 0:
-            return 0
-        else:
-            # 线程安全加读写锁的读锁
-            read_marker = marker.gen_rlock()
-            read_marker.acquire()
-            current_ts = time.time() * 1000 if not current_ts else current_ts
-            head_ts, tail_ts, tail_value = self.queue[0][0], self.queue[-1][0], self.queue[-1][1]
-            interval = current_ts - tail_ts
-            sum_value = self.window_sum + interval * tail_value
-            mean_value = sum_value / (current_ts - head_ts)
-            read_marker.release()
-            return mean_value
+        try:
+            if self.queue == 0:
+                return 0
+            else:
+                # 线程安全加读写锁的读锁
+                read_marker = marker.gen_rlock()
+                read_marker.acquire()
+                current_ts = time.time() * 1000 if not current_ts else current_ts
+                head_ts, tail_ts, tail_value = self.queue[0][0], self.queue[-1][0], self.queue[-1][1]
+                interval = current_ts - tail_ts
+                sum_value = self.window_sum + interval * tail_value
+                mean_value = sum_value / (current_ts - head_ts)
+                read_marker.release()
+                return mean_value
+        except Exception as e:
+            print(e)
 
     def update(self, timestamp: float, value: float):
         # 线程安全加读写锁的写锁
-        write_marker = marker.gen_wlock()
-        write_marker.acquire()
-        # 初始化计算前一个元素的股价积分面积并更新
-        self.calculate_prev_area(timestamp=timestamp, value=value)
-        # 时间窗口淘汰策略
-        self.window_strategy(timestamp=timestamp)
-        # 内存空间合并策略
-        self.memory_strategy()
-        write_marker.release()
+        try:
+            write_marker = marker.gen_wlock()
+            write_marker.acquire()
+            # 默认入队的timestamp比队尾的timestamp要大
+            # 初始化计算前一个元素的股价积分面积并更新
+            self.calculate_prev_area(timestamp=timestamp, value=value)
+            # 时间窗口淘汰策略
+            self.window_strategy(timestamp=timestamp)
+            # 内存空间合并策略
+            self.memory_strategy()
+            write_marker.release()
+        except Exception as e:
+            print(e)
 
     def calculate_prev_area(self, timestamp: float, value: float):
         """
