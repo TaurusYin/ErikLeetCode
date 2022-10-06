@@ -172,3 +172,25 @@ def diffWaysToCompute(self, input: str) -> List[int]:
                         res.append(l * r)
 
     return res
+
+# https://leetcode.cn/problems/score-of-parentheses/solution/gua-hao-de-fen-shu-by-leetcode/
+"""
+给定一个平衡括号字符串S，按下述规则计算该字符串的分数：
+() 得 1 分。
+AB 得A + B分，其中 A 和 B 是平衡括号字符串。
+(A) 得2 * A分，其中 A 是平衡括号字符串。
+链接：https://leetcode.cn/problems/score-of-parentheses
+"""
+def scoreOfParentheses(self, S):
+        stack = [0]  # The score of the current frame
+
+        for x in S:
+            if x == '(':
+                stack.append(0)
+            else:
+                v = stack.pop()
+                stack[-1] += max(2 * v, 1)
+
+        return stack.pop()
+
+

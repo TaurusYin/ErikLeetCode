@@ -72,22 +72,24 @@ def maxProduct(self, nums: List[int]) -> int:
 
 
 # https://leetcode.cn/problems/remove-duplicates-from-sorted-array/
-def removeDuplicates(self, nums):
-    """
-    :type nums: List[int]
-    :rtype: int
-    """
-    if len(nums) < 2: return len(nums)
+"""
+输入：nums = [1,1,2]
+输出：2, nums = [1,2,_]
+解释：函数应该返回新的长度 2 ，并且原数组 nums 的前两个元素被修改为 1, 2 。不需要考虑数组中超出新长度后面的元素。
+"""
+def removeDuplicates(self, nums: List[int]) -> int:
+    if not nums:
+        return 0
 
-    i, j = 0, 1
-    while j < len(nums):
-        if nums[i] == nums[j]:
-            j += 1
-        else:
-            i += 1
-            nums[i] = nums[j]
-            j += 1
-    return i + 1
+    n = len(nums)
+    fast = slow = 1
+    while fast < n:
+        if nums[fast] != nums[fast - 1]:
+            nums[slow] = nums[fast]
+            slow += 1
+        fast += 1
+
+    return slow
 
 
 # https://leetcode.cn/problems/remove-element/
@@ -111,6 +113,8 @@ def removeElement(self, nums: List[int], val: int) -> int:
 有序
 链接：https://leetcode.cn/problems/two-sum-ii-input-array-is-sorted
 """
+
+
 def twoSum(self, numbers: List[int], target: int) -> List[int]:
     low, high = 0, len(numbers) - 1
     while low < high:
@@ -123,6 +127,7 @@ def twoSum(self, numbers: List[int], target: int) -> List[int]:
             high -= 1
     return [-1, -1]
 
+
 """
 https://leetcode.cn/problems/two-sum/solution/liang-shu-zhi-he-by-leetcode-solution/
 输入：nums = [2,7,11,15], target = 9
@@ -131,6 +136,8 @@ https://leetcode.cn/problems/two-sum/solution/liang-shu-zhi-he-by-leetcode-solut
 
 链接：https://leetcode.cn/problems/two-sum
 """
+
+
 def twoSum(self, nums: List[int], target: int) -> List[int]:
     hashtable = dict()
     for i, num in enumerate(nums):
@@ -138,8 +145,6 @@ def twoSum(self, nums: List[int], target: int) -> List[int]:
             return [hashtable[target - num], i]
         hashtable[nums[i]] = i
     return []
-
-
 
 
 # https://leetcode.cn/problems/3sum/solution/by-s1ne-p3qs/
@@ -206,6 +211,7 @@ def nSumTarget(self, nums, n, start, target):
 
     return res
 
+
 """
 滑动窗口左移动 右移动
 https://leetcode.cn/problems/minimum-size-subarray-sum/solution/chang-du-zui-xiao-de-zi-shu-zu-by-leetcode-solutio/
@@ -215,6 +221,8 @@ O(n)
 输出：2
 解释：子数组 [4,3] 是该条件下的长度最小的子数组。
 """
+
+
 def minSubArrayLen(self, s: int, nums: List[int]) -> int:
     if not nums:
         return 0
