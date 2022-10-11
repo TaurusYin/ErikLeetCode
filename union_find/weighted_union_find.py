@@ -67,6 +67,19 @@ class UnionFind:
             return -1.0
 
 
+"""
+https://leetcode.cn/problems/evaluate-division/
+输入：equations = [["a","b"],["b","c"]], values = [2.0,3.0], queries = [["a","c"],["b","a"],["a","e"],["a","a"],["x","x"]]
+输出：[6.00000,0.50000,-1.00000,1.00000,-1.00000]
+时间复杂度：O((N+Q)log⁡A)O((N + Q)\log A)O((N+Q)logA)，
+    构建并查集 O(Nlog⁡A)O(N \log A)O(NlogA) ，这里 NNN 为输入方程 equations 的长度，每一次执行合并操作的时间复杂度是 O(log⁡A)O(\log A)O(logA)，这里 AAA 是 equations 里不同字符的个数；
+    查询并查集 O(Qlog⁡A)O(Q \log A)O(QlogA)，这里 QQQ 为查询数组 queries 的长度，每一次查询时执行「路径压缩」的时间复杂度是 O(log⁡A)O(\log A)O(logA)。
+空间复杂度：O(A)O(A)O(A)：创建字符与 id 的对应关系 hashMap 长度为 AAA，并查集底层使用的两个数组 parent 和 weight 存储每个变量的连通分量信息，parent 和 weight 的长度均为 AAA。
+
+"""
+
+#a/b=2 ---> a=2b --->
+#           x=2y
 class Solution:
     def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
         id = 0
@@ -104,3 +117,58 @@ class Solution:
                 ans.append(uf.query(x, y))
 
         return ans
+
+    """
+    https://leetcode.cn/problems/evaluate-division/solution/floyd-duo-yuan-by-s1ne-cuxx/
+    """
+    def calcEquation(self, equations, values, queries):
+        g = collections.defaultdict(dict)
+        for (a, b), v in zip(equations, values): g[a][b], g[b][a] = v, 1 / v
+
+        for k in g:
+            for i in g:
+                for j in g:
+                    if k in g[i] and j in g[k]:
+                        g[i][j] = g[i][k] * g[k][j]
+
+        return [g[a][b] if a in g and b in g[a] else -1.0 for a, b in queries]
+
+    """
+    转成加权图+floyd求任意两点路径
+    """
+
+    class Solution:
+        def calcEquation(self, equations: List[List[str]], values: List[float],
+                         queries: List[List[str]]) -> List[float]:
+            # 方法2: 转成加权图+floyd求任意两点路径
+            maps = {}
+            v = set()
+            for i in range(len(values)):
+                # 记录有向边的权重
+                x, y, multiple = equations[i][0], equations[i][1], values[i]
+                maps[x, y] = multiple
+                maps[y, x] = 1 / multiple
+                v.add(x)
+                v.add(y)
+            v = list(v)
+            # floyd算法求任意两点路径
+            for k in range(len(v)):
+                for i in range(len(v)):
+                    for j in range(len(v)):
+                        vi, vj, vk = v[i], v[j], v[k]
+                        if (vi, vk) in maps and (vk, vj) in maps:
+                            if (vi, vj) not in maps:
+                                maps[vi, vj] = maps[vi, vk] * maps[vk, vj]
+                            else:
+                                maps[vi, vj] = min(maps[vi, vj],
+                                                   maps[vi, vk] * maps[vk, vj])
+            v = set(v)
+            res = []
+            for q in queries:
+                if q[0] not in v or q[1] not in v or (q[0], q[1]) not in maps:
+                    # 某个变量不存在, 或者两点之间不存在路径, 返回-1
+                    res.append(-1.0)
+                else:
+                    res.append(maps[q[0], q[1]])
+            return res
+

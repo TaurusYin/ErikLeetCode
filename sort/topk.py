@@ -90,7 +90,7 @@ def _findKthLargest(nums: List[int], k: int) -> int:
                 heapq.heappop(heap)
                 heapq.heappush(heap, num)
     return heapq.heappop(heap)
-findKthLargest(nums=[4, 10, 11, 29, 2, 3, 101], k=5)
+_findKthLargest(nums=[4, 10, 11, 29, 2, 3, 101], k=5)
 
 
 def _findKthLargest(nums: List[int], k: int) -> int:

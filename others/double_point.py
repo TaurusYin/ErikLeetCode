@@ -1,4 +1,5 @@
 # https://leetcode.cn/problems/remove-duplicates-from-sorted-array/
+import heapq
 from typing import List
 
 """
@@ -104,6 +105,8 @@ https://leetcode.cn/problems/remove-all-adjacent-duplicates-in-string-ii/solutio
 再删除 "bbb"，得到 "dddaa"
 最后删除 "ddd"，得到 "aa"
 """
+
+
 def removeDuplicates(self, s: str, k: int) -> str:
     n = len(s)
     stack = []
@@ -364,3 +367,29 @@ class MedianFinder:
 
     def findMedian(self) -> float:
         return (self.left_value + self.right_value) / 2
+
+
+class MedianFinder:
+
+    def __init__(self):
+        self.small_heap = []  # 最大堆
+        self.large_heap = []  # 最小堆
+
+    def addNum(self, num: int) -> None:
+        if len(self.small_heap) < len(self.large_heap):  # 加到small堆中
+            # 先将num加到large中，再将large中的最小值弹出加入到small
+            small_num = heapq.heappushpop(self.large_heap, num)
+            heapq.heappush(self.small_heap, -small_num)
+        else:
+            # 先将num加到small中，再将small中的最小值弹出加入到large
+            large_num = -heapq.heappushpop(self.small_heap, -num)
+            heapq.heappush(self.large_heap, large_num)
+
+    def findMedian(self) -> float:
+        if len(self.small_heap) == len(self.large_heap):
+            small = -self.small_heap[0]
+            large = self.large_heap[0]
+            return small + (large - small) / 2
+        else:
+            mid = self.large_heap[0]
+            return mid

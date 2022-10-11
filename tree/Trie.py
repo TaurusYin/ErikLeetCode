@@ -32,37 +32,69 @@ https://leetcode.cn/problems/implement-trie-prefix-tree/
 """
 
 
-class Trie:
+class Trie(object):
+
     def __init__(self):
-        # 初始化字典树
-        self.alpha_dict = {}
-        # 字符串结束标记
-        self.end_of_string = -1
+        """
+        Initialize your data structure here.
+        """
+        self.root = {'end':True}
 
-    def insert(self, word: str) -> None:
-        node = self.alpha_dict
-        # 迭代建立字典树
-        for s in word:
-            if s not in node:
-                node[s] = {}
-            node = node[s]
-        # 该字符串最后一位进行标记
-        node[self.end_of_string] = True
+    def insert(self, word):
+        """
+        Inserts a word into the trie.
+        :type word: str
+        :rtype: None
+        """
+        node = self.root
+        for c in word:
+            if c not in node:
+                node[c] = {}
+            node = node[c]
+        node['end'] = True
 
-    def search(self, word: str) -> bool:
-        node = self.alpha_dict
-        for s in word:
-            if s not in node:
+    def search(self, word):
+        """
+        Returns if the word is in the trie.
+        :type word: str
+        :rtype: bool
+        """
+        node = self.root
+        for c in word:
+            if c not in node or 'end' not in node:
                 return False
-            node = node[s]
-        # 当且仅当当前word的每一位都可以在字典树中找到且存在end_of_string
-        return self.end_of_string in node
+            node = node[c]
+        return 'end' in node
 
-    def startsWith(self, prefix: str) -> bool:
-        node = self.alpha_dict
-        for s in prefix:
-            if s not in node:
+
+    def startsWith(self, prefix):
+        """
+        Returns if there is any word in the trie that starts with the given prefix.
+        :type prefix: str
+        :rtype: bool
+        """
+        node = self.root
+        for c in prefix:
+            if c not in node:
                 return False
-            node = node[s]
-        # 只要当前prefix中每一位都可以在字典树中找到就可以
+            node = node[c]
         return True
+
+
+"""
+https://leetcode.cn/problems/longest-word-in-dictionary/solution/ci-dian-zhong-zui-chang-de-dan-ci-by-lee-k5gj/
+O(sum(Li单词长度))
+O(sum(Li单词长度))
+输入：words = ["w","wo","wor","worl", "world"]
+输出："world"
+解释： 单词"world"可由"w", "wo", "wor", 和 "worl"逐步添加一个字母组成。
+"""
+def longestWord(self, words: List[str]) -> str:
+    t = Trie()
+    for word in words:
+        t.insert(word)
+    longest = ""
+    for word in words:
+        if t.search(word) and (len(word) > len(longest) or len(word) == len(longest) and word < longest):
+            longest = word
+    return longest

@@ -1,7 +1,14 @@
 import collections
 from typing import List
 
-
+"""
+Union-Find 算法的复杂度可以这样分析：构造函数初始化数据结构需要 O(N) 的时间和空间复杂度；连通两个节点 union、判断两个节点的连通性 connected、计算连通分量 count 所需的时间复杂度均为 O(1)。
+到这里，相信你已经掌握了 Union-Find 算法的核心逻辑，总结一下我们优化算法的过程：
+1、用 parent 数组记录每个节点的父节点，相当于指向父节点的指针，所以 parent 数组内实际存储着一个森林（若干棵多叉树）。
+2、用 size 数组记录着每棵树的重量，目的是让 union 后树依然拥有平衡性，保证各个 API 时间复杂度为 O(logN)，而不会退化成链表影响操作效率。
+3、在 find 函数中进行路径压缩，保证任意树的高度保持在常数，使得各个 API 时间复杂度为 O(1)。使用了路径压缩之后，可以不使用 size 数组的平衡优化。
+下面我们看一些具体的并查集题目。
+"""
 class UnionFind:
     def __init__(self, n):
         self.root = [i for i in range(n)]
@@ -20,6 +27,7 @@ class UnionFind:
         root_y = self.find(y)
         if root_x == root_y:  # 找到环
             return True
+        # parent_id 小的为父节点， 默认 y是x的父节点
         if root_x <= root_y:  # 没找到环，更新两个节点的parent为其中最小值
             root_x, root_y = root_y, root_x
         self.root[root_x] = root_y
@@ -111,6 +119,10 @@ class UnionFind:
         '''
 
     """
+    
+    """
+
+    """
     连接n个联通分量需要n-1跟绳子，求联通分量-1
     https://leetcode.cn/problems/number-of-operations-to-make-network-connected/solution/
     """
@@ -162,6 +174,41 @@ class UnionFind:
             else:
                 uf.union(edges[i][0], edges[i][1])
         return True if uf.part == 1 else False
+
+    """
+    https://leetcode.cn/problems/surrounded-regions/solution/dfs-bfs-bing-cha-ji-by-powcai/
+    输入：board = [["X","X","X","X"],["X","O","O","X"],["X","X","O","X"],["X","O","X","X"]]
+输出：[["X","X","X","X"],["X","X","X","X"],["X","X","X","X"],["X","O","X","X"]]
+解释：被围绕的区间不会存在于边界上，换句话说，任何边界上的 'O' 都不会被填充为 'X'。 任何不在边界上，或不与边界上的 'O' 相连的 'O' 最终都会被填充为 'X'。如果两个元素在水平或垂直方向相邻，则称它们是“相连”的。
+
+    """
+
+    def solve(self, board: List[List[str]]) -> None:
+        """
+        Do not return anything, modify board in-place instead.
+        """
+        if not board or not board[0]:
+            return
+        row = len(board)
+        col = len(board[0])
+        dummy = row * col
+        uf = UnionFind(dummy + 1)
+
+        for i in range(row):
+            for j in range(col):
+                if board[i][j] == "O":
+                    if i == 0 or i == row - 1 or j == 0 or j == col - 1:
+                        uf.union(i * col + j, dummy)
+                    else:
+                        for x, y in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                            if board[i + x][j + y] == "O":
+                                uf.union(i * col + j, (i + x) * col + (j + y))
+        for i in range(row):
+            for j in range(col):
+                if uf.find(dummy) == uf.find(i * col + j):
+                    board[i][j] = "O"
+                else:
+                    board[i][j] = "X"
 
     """
     在由 1 x 1 方格组成的 n x n 网格 grid 中，每个 1 x 1 方块由 '/'、'\' 或空格构成。这些字符会将方块划分为一些共边的区域。给定网格 grid 表示为一个字符串数组，返回 区域的数量 

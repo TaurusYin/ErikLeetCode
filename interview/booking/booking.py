@@ -28,11 +28,11 @@ input = [
 
 
 class Node:
-    def __init__(self, value:list):
+    def __init__(self, value: list):
         self.value = value
 
     def __lt__(self, other:list):
-        return self.value[2] < other.value[2]
+        return self.value[2] > other.value[2]
 
     def __eq__(self, other): return self.value[2] == other.value[2]
 
@@ -40,25 +40,33 @@ class Node:
 
 
 def k_largest_scores(input, k):
-    uf = UnionFind()
+    uf = UnionFind(100)
     parent_list = []
     for id, parent_id, score in input:
         if id is not None and parent_id is not None:
-            uf.join(parent_id, id)
+            uf.union(parent_id, id)
     for id, parent_id, score in input:
         root_id = uf.find(id)
-        if True or root_id == id:
+        if root_id == id:
             parent_list.append([id, parent_id, score])
     parent_list = sorted(parent_list, key=lambda x: -x[2])
     parent_list = [Node(x) for x in parent_list]
-    heap = [x for x in parent_list]
-    heapq.heapify(heap)
-    heapq.heappop(heap)
-    n = len(parent_list)
-    for i in range(k, n):
-        heapq.heappush(heap, parent_list[i])
-    print(parent_list)
-    print(heap)
+    heap = []
+
+    heap = []
+    for item in parent_list:
+        # 如果堆长度没到k，无脑塞
+        if len(heap) < k:
+            heapq.heappush(heap, item)
+        else:
+            # 如果长度到k了，且当前元素比堆顶要大，我们才加进去，当然要先把最小的pop出来再加！
+            x = heap[0]
+            if item.value[2] > heap[0].value[2]:
+                heapq.heappop(heap)
+                heapq.heappush(heap, item)
+
+    res = list(map(lambda x:[x.value[0],x.value[2]], heap))
+    return res
 
 
 def _k_largest_scores(input, k):
