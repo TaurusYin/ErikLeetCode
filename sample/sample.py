@@ -1,4 +1,5 @@
-from bisect import bisect
+import itertools
+from bisect import bisect, bisect_left
 from collections import defaultdict
 from random import randrange, choice, random, randint
 from typing import List
@@ -63,6 +64,8 @@ class HashSampling:
 按权重随机选择
 对于 w = [1, 3]，挑选下标 0 的概率为 1 / (1 + 3) = 0.25 （即，25%），而选取下标 1 的概率为 3 / (1 + 3) = 0.75（即，75%）。
 链接：https://leetcode.cn/problems/random-pick-with-weight
+https://leetcode.cn/problems/random-pick-with-weight/solution/an-quan-zhong-sui-ji-xuan-ze-by-leetcode-h13t/
+
 """
 
 
@@ -76,6 +79,19 @@ class WeightedSampling:
         k = random.randint(1, self.pre[-1])
         return bisect.bisect_left(self.pre, k) - 1
 
+class WeightedSampling:
+
+    def __init__(self, w: List[int]):
+        self.pre = list(itertools.accumulate(w))
+        self.total = sum(w)
+
+    def pickIndex(self) -> int:
+        import random
+        x = random.randint(1, self.total)
+        return bisect_left(self.pre, x)
+ws = WeightedSampling([1, 3])
+res = ws.pickIndex()
+print()
 
 """
  如果在黑名单中, 那么就映射为白名单的值
@@ -145,6 +161,27 @@ def rand10(self):
     return 1 + (num - 1) % 10
 
 
-import random
 
+
+"""
+0～n-1 抽取m个数
+https://zhuanlan.zhihu.com/p/26640671
+"""
+from random import randrange
+from itertools import islice, accumulate
+
+
+def sample_generator(n):
+    pool = {}
+    for i in range(n):         # invariant:  non-selected at [0,n-i)
+        j = randrange(n-i)
+        result = pool.get(j, j)
+        pool[j] = pool.get(n - i - 1, n - i - 1)
+        yield result
+
+def sample(n, m):
+    return list(islice(sample_generator(n), 0, m))
+
+res = sample(10, 5)
+print()
 

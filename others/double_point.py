@@ -77,6 +77,8 @@ def maxProduct(self, nums: List[int]) -> int:
 输出：2, nums = [1,2,_]
 解释：函数应该返回新的长度 2 ，并且原数组 nums 的前两个元素被修改为 1, 2 。不需要考虑数组中超出新长度后面的元素。
 """
+
+
 def removeDuplicates(self, nums: List[int]) -> int:
     if not nums:
         return 0
@@ -88,8 +90,34 @@ def removeDuplicates(self, nums: List[int]) -> int:
             nums[slow] = nums[fast]
             slow += 1
         fast += 1
-
     return slow
+
+
+"""
+将元素依次入栈并统计元素数量。每次入栈判断是否和栈顶元素相同：如果与栈顶元素相同，那么将栈顶元素的数量加 1；如果栈顶元素数量达到 3，则将栈顶元素出栈；如果待入栈元素与栈顶元素不同，那么直接入栈并将该元素个数置为 1。遍历完字符串之后，将栈中剩余元素拼接即为答案。
+链接：https://leetcode.cn/problems/remove-all-adjacent-duplicates-in-string-ii/solution/zhan-python3-by-smoon1989/
+https://leetcode.cn/problems/remove-all-adjacent-duplicates-in-string-ii/solution/zhan-python3-by-smoon1989/
+输入：s = "deeedbbcccbdaa", k = 3
+输出："aa"
+解释： 
+先删除 "eee" 和 "ccc"，得到 "ddbbbdaa"
+再删除 "bbb"，得到 "dddaa"
+最后删除 "ddd"，得到 "aa"
+"""
+def removeDuplicates(self, s: str, k: int) -> str:
+    n = len(s)
+    stack = []
+    for c in s:
+        if not stack or stack[-1][0] != c:
+            stack.append([c, 1])
+        elif stack[-1][1] + 1 < k:
+            stack[-1][1] += 1
+        else:
+            stack.pop()
+    ans = ""
+    for c, l in stack:
+        ans += c * l
+    return ans
 
 
 # https://leetcode.cn/problems/remove-element/

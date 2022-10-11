@@ -438,6 +438,23 @@ def isSameTree(self, s, t):
     return s.val == t.val and self.isSameTree(s.left, t.left) and self.isSameTree(s.right, t.right)
 
 
+"""
+https://leetcode.cn/problems/flip-equivalent-binary-trees/solution/fan-zhuan-deng-jie-er-cha-shu-by-leetcode/
+time complexity: O(min(N1,N2))  树大小
+space complexity : O(min(H1,H2)) 树高度
+"""
+def flipEquiv(self, root1, root2):
+    if root1 is root2:
+        return True
+    if not root1 or not root2 or root1.val != root2.val:
+        return False
+
+    return (self.flipEquiv(root1.left, root2.left) and
+            self.flipEquiv(root1.right, root2.right) or
+            self.flipEquiv(root1.left, root2.right) and
+            self.flipEquiv(root1.right, root2.left))
+
+
 def isSubtree(self, root: TreeNode, subRoot: TreeNode) -> bool:
     if not root and not subRoot:
         return True
@@ -452,6 +469,8 @@ def isSubtree(self, root: TreeNode, subRoot: TreeNode) -> bool:
 是不是链表的子路径
 链接：https://leetcode.cn/problems/linked-list-in-binary-tree
 """
+
+
 def dfs(self, head: ListNode, rt: TreeNode) -> bool:
     if not head:
         return True

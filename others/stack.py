@@ -1,6 +1,8 @@
 import collections
 from typing import List
 
+from sortedcontainers import SortedList
+
 """
 https://leetcode.cn/problems/decode-string/
 示例 1：
@@ -438,3 +440,27 @@ class MinStack:
         return self.min_stack[-1]
 
 
+class MaxStack:
+    def __init__(self):
+        self.idx, self.stk, self.sl = 0, dict(), SortedList()
+
+    def push(self, x: int) -> None:
+        self.stk[self.idx] = x
+        self.sl.add((x, self.idx))
+        self.idx += 1
+
+    def pop(self) -> int:
+        i, x = self.stk.popitem()
+        self.sl.remove((x, i))
+        return x
+
+    def top(self) -> int:
+        return next(reversed(self.stk.values()))
+
+    def peekMax(self) -> int:
+        return self.sl[-1][0]
+
+    def popMax(self) -> int:
+        x, i = self.sl.pop()
+        self.stk.pop(i)
+        return x

@@ -1,5 +1,5 @@
-
 import heapq
+
 
 class Node(object):
     def __init__(self, val: int):
@@ -17,8 +17,9 @@ class Node(object):
     def __gt__(self, other):
         return self.val > other.val
 
+
 heap = [Node(2), Node(0), Node(1), Node(4), Node(2)]
-heap = [2,0,1,4,2]
+heap = [2, 0, 1, 4, 2]
 heapq.heapify(heap)
 print(heap)  # output: [Node value: 0, Node value: 2, Node value: 1, Node value: 4, Node value: 2]
 
@@ -29,34 +30,39 @@ print(heap)  # output: [
 https://leetcode.cn/problems/implement-trie-prefix-tree/
 
 """
+
+
 class Trie:
     def __init__(self):
-        self.children = [None] * 26
-        self.isEnd = False
-
-    def searchPrefix(self, prefix: str) -> "Trie":
-        node = self
-        for ch in prefix:
-            ch = ord(ch) - ord("a")
-            if not node.children[ch]:
-                return None
-            node = node.children[ch]
-        return node
+        # 初始化字典树
+        self.alpha_dict = {}
+        # 字符串结束标记
+        self.end_of_string = -1
 
     def insert(self, word: str) -> None:
-        node = self
-        for ch in word:
-            ch = ord(ch) - ord("a")
-            if not node.children[ch]:
-                node.children[ch] = Trie()
-            node = node.children[ch]
-        node.isEnd = True
+        node = self.alpha_dict
+        # 迭代建立字典树
+        for s in word:
+            if s not in node:
+                node[s] = {}
+            node = node[s]
+        # 该字符串最后一位进行标记
+        node[self.end_of_string] = True
 
     def search(self, word: str) -> bool:
-        node = self.searchPrefix(word)
-        return node is not None and node.isEnd
+        node = self.alpha_dict
+        for s in word:
+            if s not in node:
+                return False
+            node = node[s]
+        # 当且仅当当前word的每一位都可以在字典树中找到且存在end_of_string
+        return self.end_of_string in node
 
     def startsWith(self, prefix: str) -> bool:
-        return self.searchPrefix(prefix) is not None
-
-
+        node = self.alpha_dict
+        for s in prefix:
+            if s not in node:
+                return False
+            node = node[s]
+        # 只要当前prefix中每一位都可以在字典树中找到就可以
+        return True
