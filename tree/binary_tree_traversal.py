@@ -654,6 +654,30 @@ def pathSum(self, root: Optional[TreeNode], targetSum: int) -> List[List[int]]:
 
 
 """
+Input: root = [1,2,3]
+Output: 25
+Explanation:
+The root-to-leaf path 1->2 represents the number 12.
+The root-to-leaf path 1->3 represents the number 13.
+Therefore, sum = 12 + 13 = 25.
+https://leetcode.cn/problems/sum-root-to-leaf-numbers/solution/qiu-gen-dao-xie-zi-jie-dian-shu-zi-zhi-he-by-leetc/
+"""
+
+def sumNumbers(self, root: TreeNode) -> int:
+    def dfs(root: TreeNode, prevTotal: int) -> int:
+        if not root:
+            return 0
+        total = prevTotal * 10 + root.val
+        if not root.left and not root.right:
+            return total
+        else:
+            return dfs(root.left, total) + dfs(root.right, total)
+
+    return dfs(root, 0)
+
+
+
+"""
 https://leetcode.cn/problems/house-robber-iii/solution/python3-hou-xu-bian-li-by-accsrd-37t9/
 输入: root = [3,2,3,null,3,null,1]
 输出: 7 
