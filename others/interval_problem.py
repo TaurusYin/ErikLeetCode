@@ -8,6 +8,9 @@ https://leetcode.cn/problems/remove-covered-intervals/solution/
 [[1, 4], [1, 4], [1, 4]]
 时间复杂度：O(N \log N)O(NlogN)，其中 NN 是区间的个数。
 空间复杂度：O(\log N)O(logN)，为排序需要的空间。
+输入：intervals = [[1,4],[3,6],[2,8]]
+输出：2
+解释：区间 [3,6] 被区间 [2,8] 覆盖，所以它被删除了。
 """
 
 
@@ -48,7 +51,14 @@ def merge(self, intervals: List[List[int]]) -> List[List[int]]:
 
     return merged
 
+"""
+输入：firstList = [[0,2],[5,10],[13,23],[24,25]], secondList = [[1,5],[8,12],[15,24],[25,26]]
+输出：[[1,2],[5,5],[8,10],[15,23],[24,24],[25,25]]
 
+来源：力扣（LeetCode）
+链接：https://leetcode.cn/problems/interval-list-intersections
+著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+"""
 # https://leetcode.cn/problems/interval-list-intersections/solution/qu-jian-lie-biao-de-jiao-ji-by-leetcode/
 def intervalIntersection(self, A: List[List[int]], B: List[List[int]]) -> List[List[int]]:
     ans = []
