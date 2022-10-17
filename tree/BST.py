@@ -7,6 +7,7 @@ class Solution:
     """
     https://leetcode.cn/problems/delete-node-in-a-bst/
     """
+
     def _deleteNode(self, root: Optional[TreeNode], key: int) -> Optional[TreeNode]:
         def traversal(root):
             if not root:
@@ -162,7 +163,29 @@ class Solution:
             stack.append(postorder[i])
         return True
 
-    """
+
+"""
+输入：nums = [-10,-3,0,5,9]
+输出：[0,-3,9,-10,null,5]
+给你一个整数数组 nums ，其中元素已经按 升序 排列，请你将其转换为一棵 高度平衡 二叉搜索树。
+"""
+
+
+def sortedArrayToBST(self, nums: List[int]) -> Optional[TreeNode]:
+    if not nums:
+        return None
+    if len(nums) == 1:
+        return TreeNode(nums[0])
+    mid = int(len(nums) / 2)
+    left_node = self.sortedArrayToBST(nums[:mid])
+    right_node = self.sortedArrayToBST(nums[mid + 1:])
+    root = TreeNode(nums[mid])
+    root.left = left_node
+    root.right = right_node
+    return root
+
+
+"""
     输入: head = [-10,-3,0,5,9]
 输出: [0,-3,9,-10,null,5]
 解释: 一个可能的答案是[0，-3,9，-10,null,5]，它表示所示的高度平衡的二叉搜索树。
@@ -172,28 +195,29 @@ class Solution:
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
     """
 
-    def sortedListToBST(self, head: ListNode) -> TreeNode:
-        def getLength(head: ListNode) -> int:
-            ret = 0
-            while head:
-                ret += 1
-                head = head.next
-            return ret
 
-        def buildTree(left: int, right: int) -> TreeNode:
-            if left > right:
-                return None
-            mid = (left + right + 1) // 2
-            root = TreeNode()
-            root.left = buildTree(left, mid - 1)
-            nonlocal head
-            root.val = head.val
+def sortedListToBST(self, head: ListNode) -> TreeNode:
+    def getLength(head: ListNode) -> int:
+        ret = 0
+        while head:
+            ret += 1
             head = head.next
-            root.right = buildTree(mid + 1, right)
-            return root
+        return ret
 
-        length = getLength(head)
-        return buildTree(0, length - 1)
+    def buildTree(left: int, right: int) -> TreeNode:
+        if left > right:
+            return None
+        mid = (left + right + 1) // 2
+        root = TreeNode()
+        root.left = buildTree(left, mid - 1)
+        nonlocal head
+        root.val = head.val
+        head = head.next
+        root.right = buildTree(mid + 1, right)
+        return root
+
+    length = getLength(head)
+    return buildTree(0, length - 1)
 
 
 """
@@ -224,11 +248,14 @@ class BSTIterator(object):
     def hasNext(self):
         return len(self.stack) > 0
 
+
 """
 长度为 nn 的序列能构成的不同二叉搜索树的个数
 https://leetcode.cn/problems/unique-binary-search-trees/solution/bu-tong-de-er-cha-sou-suo-shu-by-leetcode-solution/
 以 ii 为根、序列长度为 nn 的不同二叉搜索树个数 (1 \leq i \leq n)(1≤i≤n)
 """
+
+
 def numTrees(self, n):
     """
     :type n: int

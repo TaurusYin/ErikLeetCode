@@ -47,24 +47,26 @@ class Solution:
         return result
 
     def permute(self, nums: List[int]) -> List[List[int]]:
-        res = []  # 存放符合条件结果的集合
-        path = []  # 用来存放符合条件的结果
-        used = []  # 用来存放已经用过的数字
-
-        def backtrack(nums, used):
+        def backtrack(nums, startIndex):
             if len(path) == len(nums):
-                return res.append(path[:])  # 此时说明找到了一组
-            for i in range(0, len(nums)):
-                if nums[i] in used:
-                    continue  # used里已经收录的元素，直接跳过
+                result.append(path[:])  # 收集子集，要放在终止添加的上面，否则会漏掉自己
+            # print('result:{}, path:{}'.format(result, path[:]))
+            for i in range(0, len(nums)):  # 当startIndex已经大于数组的长度了，就终止了，for循环本来也结束了，所以不需要终止条件
+                # print('local path:{}'.format(path))
+                if used[i]:
+                    continue
                 path.append(nums[i])
-                used.append(nums[i])
-                backtrack(nums, used)
-                used.pop()
-                path.pop()
+                used[i] = True
+                backtrack(nums, i + 1)  # 递归
+                path.pop()  # 回溯
+                used[i] = False
 
-        backtrack(nums, used)
-        return res
+        result = []
+        path = []
+        used = [False] * len(nums)
+        backtrack(nums, 0)
+        print(used)
+        return result
 
     def permute(self, nums: List[int]) -> List[List[int]]:
         def backtrack(nums):
@@ -121,6 +123,7 @@ class Solution:
 仅有这两种组合。
 
     """
+
     def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
         path = []
         res = []
@@ -134,8 +137,8 @@ class Solution:
                 res.append(path[:])
 
             for i in range(start_index, len(candidates)):
-                # i > start_index, aviod candidates[0], candidates[-1]
-                if i - 1 >= start_index and candidates[i] == candidates[i - 1]:
+                # i > start_index, avoid candidates[0], candidates[-1]
+                if i > start_index and candidates[i] == candidates[i - 1]:
                     continue
                 path.append(candidates[i])
                 backtrack(candidates, i + 1)
@@ -152,6 +155,7 @@ class Solution:
     [1,2,1],
     [2,1,1]]
     """
+
     def permuteUnique(self, nums: List[int]) -> List[List[int]]:
         # res用来存放结果
         if not nums: return []
@@ -331,6 +335,7 @@ class Solution:
 链接：https://leetcode.cn/problems/next-permutation
 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
     """
+
     def nextPermutation(self, nums: List[int]) -> None:
         i = len(nums) - 2
         while i >= 0 and nums[i] >= nums[i + 1]:

@@ -100,6 +100,30 @@ def firstMissingPositive(self, nums: List[int]) -> int:
 
 
 """
+给你一个含 n 个整数的数组 nums ，其中 nums[i] 在区间 [1, n] 内。请你找出所有在 [1, n] 范围内但没有出现在 nums 中的数字，并以数组的形式返回结果。
+输入：nums = [4,3,2,7,8,2,3,1]
+输出：[5,6] O(N)
+https://leetcode.cn/problems/find-all-numbers-disappeared-in-an-array/solution/tong-pai-xu-ji-yu-yi-huo-yun-suan-jiao-huan-liang-/
+"""
+def findDisappearedNumbers(self, nums: List[int]) -> List[int]:
+    # 基于异或运算交换数组两个位置的元素，不使用额外的空间
+    def swap(nums, index1, index2):
+        # 这一步是必要的，否则会使得一个数变成 0
+        if index1 == index2:
+            return
+        nums[index1] = nums[index1] ^ nums[index2]
+        nums[index2] = nums[index1] ^ nums[index2]
+        nums[index1] = nums[index1] ^ nums[index2]
+
+    for i in range(len(nums)):
+        while nums[i] != nums[nums[i] - 1]:
+            # 如果不在位置上，并且它将要去的那个位置上的数不等于自己，则交换
+            swap(nums, i, nums[i] - 1)
+
+    return [i + 1 for i, num in enumerate(nums) if num != i + 1]
+
+
+"""
 编写一个函数，输入是一个无符号整数（以二进制串的形式），返回其二进制表达式中数字位数为 '1' 的个数（也被称为汉明重量）。
 输入：00000000000000000000000000001011
 输出：3
@@ -189,6 +213,34 @@ def countPrimes(self, n: int) -> int:
                 l[j] = False
     # 返回列表种True的个数
     return l.count(True)
+
+
+"""
+https://leetcode.cn/problems/powx-n/solution/xiong-mao-shua-ti-python3-di-gui-by-lotuspanda/
+输入：x = 2.10000, n = 3
+输出：9.26100
+"""
+
+
+class Solution:
+    def myPow(self, x: float, n: int) -> float:
+        if n == 0:
+            return 1
+        if n == 1:
+            return x
+        if n < 0:
+            n = -n
+            half = self.myPow(x, n // 2)  # 注意，这里用地板除法
+            if n % 2 == 0:
+                return 1 / (half * half)  # 这里注意用算数的除法
+            else:
+                return 1 / (half * half * x)
+        else:
+            half = self.myPow(x, n // 2)
+            if n % 2 == 0:
+                return half * half
+            else:
+                return half * half * x
 
 
 """
@@ -285,6 +337,7 @@ def grayCode(self, n: int) -> List[int]:
 时空复杂度均为O(L)，其中L为答案字符串的长度
 其实这里应该有一个公式能把L用输入的两数的值M，N来表示的，但是我没想出来 ORZ
 """
+
 
 def fractionToDecimal(self, numerator: int, denominator: int) -> str:
     # 预处理
