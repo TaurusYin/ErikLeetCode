@@ -518,6 +518,62 @@ def rob(self, nums: List[int]) -> int:
     return max(rob_noncicle(nums[1:]), rob_noncicle(nums[:-1]))
 
 
+"""
+给你一个 只包含正整数 的 非空 数组 nums 。请你判断是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。
+输入：nums = [1,5,11,5]
+输出：true
+解释：数组可以分割成 [1, 5, 5] 和 [11] 。
+O(n*target)
+https://leetcode.cn/problems/partition-equal-subset-sum/solution/fen-ge-deng-he-zi-ji-by-leetcode-solution/
+"""
+class Solution:
+    def canPartition(self, nums: List[int]) -> bool:
+        n = len(nums)
+        if n < 2:
+            return False
+
+        total = sum(nums)
+        if total % 2 != 0:
+            return False
+
+        target = total // 2
+        dp = [True] + [False] * target
+        for i, num in enumerate(nums):
+            for j in range(target, num - 1, -1):
+                dp[j] |= dp[j - num]
+
+        return dp[target]
+
+"""
+https://leetcode.cn/problems/target-sum/solution/494-mu-biao-he-dong-tai-gui-hua-zhi-01be-78ll/
+输入：nums = [1,1,1,1,1], target = 3
+输出：5
+解释：一共有 5 种方法让最终目标和为 3 。
+-1 + 1 + 1 + 1 + 1 = 3
++1 - 1 + 1 + 1 + 1 = 3
++1 + 1 - 1 + 1 + 1 = 3
++1 + 1 + 1 - 1 + 1 = 3
++1 + 1 + 1 + 1 - 1 = 3
+"""
+class Solution:
+    def findTargetSumWays(self, nums: List[int], S: int) -> int:
+        sumAll = sum(nums)
+        if S > sumAll or (S + sumAll) % 2:
+            return 0
+        target = (S + sumAll) // 2
+
+        dp = [0] * (target + 1)
+        dp[0] = 1
+
+        for num in nums:
+            for j in range(target, num - 1, -1):
+                dp[j] = dp[j] + dp[j - num]
+        return dp[-1]
+
+
+
+
+
 if __name__ == '__main__':
     s = Solution()
     nums1 = [1, 2, 3, 2, 1]

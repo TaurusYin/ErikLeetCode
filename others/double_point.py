@@ -393,3 +393,28 @@ class MedianFinder:
         else:
             mid = self.large_heap[0]
             return mid
+
+
+"""
+https://leetcode.cn/problems/shortest-unsorted-continuous-subarray/solution/581zui-duan-wu-xu-lian-xu-zi-shu-zu-pai-4dlft/
+输入：nums = [2,6,4,8,10,9,15]
+输出：5
+解释：你只需要对 [6, 4, 8, 10, 9] 进行升序排序，那么整个表都会变为升序排序。
+给你一个整数数组 nums ，你需要找出一个 连续子数组 ，如果对这个子数组进行升序排序，那么整个数组都会变为升序排序。
+O(n)
+"""
+class Solution:
+    def findUnsortedSubarray(self, nums):
+        left, right, min_num, max_num = 0, 0, float("inf"), float("-inf")
+
+        for i, j in enumerate(nums):
+            if j < max_num:
+                right = i
+            max_num = max(max_num, j)
+
+        for i in range(len(nums) - 1, -1, -1):
+            if nums[i] > min_num:
+                left = i
+            min_num = min(min_num, nums[i])
+        return 0 if left == right else right - left + 1
+
