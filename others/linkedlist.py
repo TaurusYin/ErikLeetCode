@@ -313,6 +313,31 @@ def reverseBetween(self, head: ListNode, left: int, right: int) -> ListNode:
 
 
 """
+给你两个链表list1 和list2，它们包含的元素分别为n 个和m 个。
+请你将list1中下标从 a 到 b 的全部节点都删除，并将list2 接在被删除节点的位置。
+输入：list1 = [0,1,2,3,4,5], a = 3, b = 4, list2 = [1000000,1000001,1000002]
+输出：[0,1,2,1000000,1000001,1000002,5]
+"""
+
+
+def mergeInBetween(self, list1: ListNode, a: int, b: int, list2: ListNode) -> ListNode:
+    pre = list1
+    length = 0
+    while list1:
+        if length == a - 1:
+            start = list1
+        elif length == b + 1:
+            end = list1
+        length += 1
+        list1 = list1.next
+    start.next = list2
+    while list2.next:
+        list2 = list2.next
+    list2.next = end
+    return pre
+
+
+"""
 给你链表的头节点 head ，每 k 个节点一组进行翻转，请你返回修改后的链表。
 k 是一个正整数，它的值小于或等于链表的长度。如果节点总数不是 k 的整数倍，那么请将最后剩余的节点保持原有顺序。
 你不能只是单纯的改变节点内部的值，而是需要实际进行节点交换。
@@ -511,6 +536,8 @@ class Solution:
 （2）🚩如果链表遍历结束，进位不为0，需要把进位项添加在链表后面
 链接：https://leetcode.cn/problems/add-two-numbers/solution/si-kao-guo-cheng-pythondai-ma-zhu-yi-by-4fl4i/
 """
+
+
 def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
     # 当前指针，结果链表
     result = curr = ListNode()
@@ -531,24 +558,28 @@ def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
     if remainder: curr.next = ListNode(remainder)
     return result.next
 
+
 """
 https://leetcode.cn/problems/copy-list-with-random-pointer/
 输入：head = [[7,null],[13,0],[11,4],[10,2],[1,0]]
 输出：[[7,null],[13,0],[11,4],[10,2],[1,0]]
 
 """
+
+
 def copyRandomList(self, head: 'Node') -> 'Node':
-        lookup = {}
+    lookup = {}
 
-        def dfs(head):
-            if not head: return None
-            if head in lookup: return lookup[head]
-            clone = Node(head.val, None, None)
-            lookup[head] = clone
-            clone.next, clone.random = dfs(head.next), dfs(head.random)
-            return clone
+    def dfs(head):
+        if not head: return None
+        if head in lookup: return lookup[head]
+        clone = Node(head.val, None, None)
+        lookup[head] = clone
+        clone.next, clone.random = dfs(head.next), dfs(head.random)
+        return clone
 
-        return dfs(head)
+    return dfs(head)
+
 
 """
 https://leetcode.cn/problems/flatten-binary-tree-to-linked-list/solution/er-cha-shu-zhan-kai-wei-lian-biao-by-leetcode-solu/
@@ -557,6 +588,8 @@ https://leetcode.cn/problems/flatten-binary-tree-to-linked-list/solution/er-cha-
 展开后的单链表应该同样使用 TreeNode ，其中 right 子指针指向链表中下一个结点，而左子指针始终为 null 。
 展开后的单链表应该与二叉树 先序遍历 顺序相同。
 """
+
+
 def flatten(self, root: TreeNode) -> None:
     preorderList = list()
 
@@ -572,6 +605,3 @@ def flatten(self, root: TreeNode) -> None:
         prev, curr = preorderList[i - 1], preorderList[i]
         prev.left = None
         prev.right = curr
-
-
-
