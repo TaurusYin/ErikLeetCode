@@ -84,6 +84,9 @@ class Solution:
         print(result)
         return self.ans
 
+    """
+    返回 树中任意两不同节点值之间的最小差值 
+    """
     def getMinimumDifference(self, root: Optional[TreeNode]) -> int:
         def traversal(root: TreeNode):
             if root == None:
@@ -125,7 +128,7 @@ class Solution:
         traversal(root)
         return ans
 
-    @cl
+
     def trimBST(self, root: TreeNode, low: int, high: int) -> TreeNode:
         '''
         确认递归函数参数以及返回值：返回更新后剪枝后的当前root节点
@@ -148,6 +151,7 @@ class Solution:
 
     """
     二叉搜索树后序遍历
+    输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历结果。
     后序遍历倒序： [ 根节点 | 右子树 | 左子树 ] 。类似 先序遍历的镜像 ，即先序遍历为 “根、左、右” 的顺序，而后序遍历的倒序为 “根、右、左” 顺序。
     单调栈
     时间复杂度 O(N)O(N) ： 遍历 postorderpostorder 所有节点，各节点均入栈 / 出栈一次，使用 O(N)O(N) 时间。
