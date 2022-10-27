@@ -85,8 +85,40 @@ class Solution:
         return self.ans
 
     """
+    
+    观察例子 [1,2,3,4,5,6,7] 假如2跟6互换了变为 [1,6,3,4,5,2,7]。观察可以得知只有(x1 = 6, y1 = 3) 和(x2 = 5, y2 = 2)的位置是逆序的。我们其实就是要找这两对逆序的位置x1和y2。然后交换其值即可。具体实现如下：
+    定义pre，first，second指针。中序遍历树。
+    如果pre为空，将其设置为当前root。
+    否则pre不空，如果发现逆序对(pre.val >= root.val) 则做如下操作：
+    如果first为空记录x1的位置到first，second记录当前的root,第二次发现逆序对会覆盖第一次的值，保证最后second记录的是y2的位置。
+    中序遍历后，交换x1的val和y2的val即可。
+    链接：https://leetcode.cn/problems/recover-binary-search-tree/solution/99-hui-fu-er-cha-sou-suo-shu-by-jyj407-jajj/
+    """
+    def recoverTree(self, root: Optional[TreeNode]) -> None:
+        self.pre, self.first, self.second = None, None, None
+
+        def inOrder(root):
+            if not root:
+                return
+
+            inOrder(root.left)
+            if not self.pre:
+                self.pre = root
+            else:
+                if self.pre.val >= root.val:
+                    if not self.first:
+                        self.first = self.pre  # record x1
+                    self.second = root  # record y2 eventually
+                self.pre = root
+            inOrder(root.right)
+
+        inOrder(root)
+        self.first.val, self.second.val = self.second.val, self.first.val
+
+    """
     返回 树中任意两不同节点值之间的最小差值 
     """
+
     def getMinimumDifference(self, root: Optional[TreeNode]) -> int:
         def traversal(root: TreeNode):
             if root == None:
@@ -127,7 +159,6 @@ class Solution:
         cnt, max_count, ans, pre = 1, 0, [], None
         traversal(root)
         return ans
-
 
     def trimBST(self, root: TreeNode, low: int, high: int) -> TreeNode:
         '''
