@@ -1,3 +1,4 @@
+from functools import cache
 from typing import Optional
 
 from tree.binary_tree_construct import TreeNode
@@ -94,6 +95,7 @@ class Solution:
     中序遍历后，交换x1的val和y2的val即可。
     链接：https://leetcode.cn/problems/recover-binary-search-tree/solution/99-hui-fu-er-cha-sou-suo-shu-by-jyj407-jajj/
     """
+
     def recoverTree(self, root: Optional[TreeNode]) -> None:
         self.pre, self.first, self.second = None, None, None
 
@@ -285,6 +287,7 @@ class BSTIterator(object):
 
 
 """
+96. 不同的二叉搜索树
 长度为 nn 的序列能构成的不同二叉搜索树的个数
 https://leetcode.cn/problems/unique-binary-search-trees/solution/bu-tong-de-er-cha-sou-suo-shu-by-leetcode-solution/
 以 ii 为根、序列长度为 nn 的不同二叉搜索树个数 (1 \leq i \leq n)(1≤i≤n)
@@ -304,3 +307,52 @@ def numTrees(self, n):
             G[i] += G[j - 1] * G[i - j]
 
     return G[n]
+
+"""
+要求结点数量为3的二叉搜索树的种数：左子树有0个结点，右子树有2个结点,左子树有1个结点，右子树有1个结点,左子树有2个结点，右子树有0个结点
+f(n) = f(i) * f(n-i-1)
+"""
+@cache
+def numTrees(self, n: int) -> int:
+    if n <= 1:
+        return 1
+    num_trees = 0
+    for i in range(n):
+        left_num_trees = self.numTrees(i)
+        right_num_trees = self.numTrees(n - 1 - i)
+        num_trees += (left_num_trees * right_num_trees)
+    return num_trees
+
+"""
+95. 不同的二叉搜索树 II
+https://leetcode.cn/problems/unique-binary-search-trees-ii/solution/by-focused-antonellibcp-m77k/
+"""
+class Solution:
+    def generateTrees(self, n: int) -> List[Optional[TreeNode]]:
+        return self.generate_tree(1, n) if n else []
+
+    def generate_tree(self, start, end):
+        '''
+        解题思路：递归分别寻找每层中的每个元素可能的左子树与右子树，然后由当前元素分别与左右子树组成的所有结果，再层层往上返回结果
+        :param start: 起始数字
+        :param end: 终止数字
+        :return: 返回所有符合条件的二叉搜索树
+        '''
+        if start > end:
+            return [None]
+        allTrees = []
+        for i in range(start, end + 1):  # 枚举可行根节点
+            # 获得所有可行的左子树集合
+            leftTrees = self.generate_tree(start, i - 1)
+            # 获得所有可行的右子树集合
+            rightTrees = self.generate_tree(i + 1, end)
+            # 从每一层的左子树与右子树集合中各选出一棵，拼接到当前遍历元素的根节点上
+            # 其中左子树列表元素的个数，取决于当前层的当前元素可以取的左孩子节点的种类数.如：很明显，当前节点为1时，左孩子只有1种，即为None
+            # 同理,其中右子树列表元素的个数，取决于当前层的当前元素可以取的右孩子节点的种类数. 如：很明显，当前节点为1时，右孩子只有2种，即为3->2 or 2->3
+            for l in leftTrees:
+                for r in rightTrees:
+                    currTree = TreeNode(i)
+                    currTree.left = l
+                    currTree.right = r
+                    allTrees.append(currTree)  # 将这一层当前元素所有可能组成的搜索树放到列表中，如果已经是最外层，即表示当前元素所生成的所有的二叉搜索树结果放入list中
+        return allTrees

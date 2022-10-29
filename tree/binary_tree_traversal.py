@@ -7,7 +7,7 @@
 若x是父节点的左孩子。则x的父节点就是x的下一个节点。如，7的下一个节点是4。
 若x是父节点的右孩子。则沿着父节点向上，直到找到一个节点的父节点的左孩子是该节点，则该节点的父节点就是x的下一个节点。如，9的下一个节点是1。
 """
-
+from collections import defaultdict
 from typing import List, Optional
 
 from others.linkedlist import ListNode
@@ -142,6 +142,41 @@ class Solution:
         res = 0
         traversal(root, '')
         return self.left_sum
+
+    """
+366. 寻找二叉树的叶子节点 从左到右将相同高度的结点放到一起
+    输入: [1,2,3,4,5] 
+          1
+         / \
+        2   3
+       / \     
+      4   5    
+输出: [[4,5,3],[2],[1]]
+链接：https://leetcode.cn/problems/find-leaves-of-binary-tree
+    """
+
+    def findLeaves(self, root: Optional[TreeNode]) -> List[List[int]]:
+        def traversal(root: TreeNode):
+            if root.left == None and root.right == None:
+                print('leaf:{}'.format(root.val))
+                hash_map[0].append(root.val)
+                return 0
+            if root.left:
+                l_depth = traversal(root.left)
+            else:
+                l_depth = 0
+            if root.right:
+                r_depth = traversal(root.right)
+            else:
+                r_depth = 0
+            current_depth = max(l_depth, r_depth) + 1
+            print('node:{}, current_depth:{}'.format(root.val, current_depth))
+            hash_map[current_depth].append(root.val)
+            return current_depth
+
+        hash_map = defaultdict(list)
+        traversal(root)
+        return list(hash_map.values())
 
     def preorder_traversal_iter(self, root):
         result = []
@@ -429,6 +464,20 @@ def isSymmetric(self, root: Optional[TreeNode]) -> bool:
 
     return traversal(root.left, root.right)
 
+def sameStructure(self, A, B):
+    # 若把B搜索了一个遍，则返回True
+    if not B:
+        return True
+    # 若B还没搜索完，但是A以及到头了，返回False
+    if not A:
+        return False
+    # 若A,B均不为None,若两节点值不相等，则返回False
+    if A.val != B.val:
+        return False
+    # 递归寻找左子树和右子树是否相同
+    return self.sameStructure(A.left, B.left) and \
+           self.sameStructure(A.right, B.right)
+
 
 def isSameTree(self, s, t):
     if not s and not t:
@@ -438,11 +487,21 @@ def isSameTree(self, s, t):
     return s.val == t.val and self.isSameTree(s.left, t.left) and self.isSameTree(s.right, t.right)
 
 
+def isSubtree(self, root: TreeNode, subRoot: TreeNode) -> bool:
+    if not root and not subRoot:
+        return True
+    if not root or not subRoot:
+        return False
+    return self.isSameTree(root, subRoot) or self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot)
+
+
 """
 https://leetcode.cn/problems/flip-equivalent-binary-trees/solution/fan-zhuan-deng-jie-er-cha-shu-by-leetcode/
 time complexity: O(min(N1,N2))  树大小
 space complexity : O(min(H1,H2)) 树高度
 """
+
+
 def flipEquiv(self, root1, root2):
     if root1 is root2:
         return True
@@ -453,14 +512,6 @@ def flipEquiv(self, root1, root2):
             self.flipEquiv(root1.right, root2.right) or
             self.flipEquiv(root1.left, root2.right) and
             self.flipEquiv(root1.right, root2.left))
-
-
-def isSubtree(self, root: TreeNode, subRoot: TreeNode) -> bool:
-    if not root and not subRoot:
-        return True
-    if not root or not subRoot:
-        return False
-    return self.isSameTree(root, subRoot) or self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot)
 
 
 """
@@ -663,6 +714,7 @@ Therefore, sum = 12 + 13 = 25.
 https://leetcode.cn/problems/sum-root-to-leaf-numbers/solution/qiu-gen-dao-xie-zi-jie-dian-shu-zi-zhi-he-by-leetc/
 """
 
+
 def sumNumbers(self, root: TreeNode) -> int:
     def dfs(root: TreeNode, prevTotal: int) -> int:
         if not root:
@@ -674,7 +726,6 @@ def sumNumbers(self, root: TreeNode) -> int:
             return dfs(root.left, total) + dfs(root.right, total)
 
     return dfs(root, 0)
-
 
 
 """
