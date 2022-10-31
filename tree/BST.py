@@ -356,3 +356,31 @@ class Solution:
                     currTree.right = r
                     allTrees.append(currTree)  # 将这一层当前元素所有可能组成的搜索树放到列表中，如果已经是最外层，即表示当前元素所生成的所有的二叉搜索树结果放入list中
         return allTrees
+
+    """
+    426. 将二叉搜索树转化为排序的双向链表
+    其实就是左右节点指向改变，右节点指向下一个比它大的数，左节点指向比它小的数。又是二叉搜索树，自然想到中序遍历
+    将一个 二叉搜索树 就地转化为一个 已排序的双向循环链表.
+    """
+    def treeToDoublyList(self, root: 'Optional[Node]') -> 'Optional[Node]':
+        def traversal(root: TreeNode):
+            nonlocal prev
+            if root == None:
+                return
+            traversal(root.left)  # 左
+            prev.right = root
+            root.left = prev
+            prev = prev.right
+            print(root.val)
+            traversal(root.right)  # 右
+
+        if not root:
+            return root
+        dummy = Node(-1, None, None)
+        prev = dummy
+        traversal(root)
+        prev.right = dummy.right
+        dummy.right.left = prev
+        print(root)
+        return dummy.right
+

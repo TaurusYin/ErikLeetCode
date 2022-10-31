@@ -50,6 +50,30 @@ class Codec:
             i += 1
         return root
 
+    """
+    652. 寻找重复的子树
+    如果两棵树具有 相同的结构 和 相同的结点值 ，则认为二者是 重复 的。
+    输入：root = [1,2,3,4,null,2,4,null,null,4]
+输出：[[2,4],[4]]
+    """
+
+    def findDuplicateSubtrees(self, root: Optional[TreeNode]) -> List[Optional[TreeNode]]:
+        def traversal(root: TreeNode):
+            if root == None:
+                return
+            root_s = self.serialize(root)
+            result[root_s] += 1  # 前序
+            if root_s in result and result[root_s] == 2:
+                ans.append(root)
+            traversal(root.left)  # 左
+            traversal(root.right)  # 右
+
+        result = collections.defaultdict(int)
+        ans = []
+        traversal(root)
+        print(ans)
+        return ans
+
 
 # BFS
 class Codec:
