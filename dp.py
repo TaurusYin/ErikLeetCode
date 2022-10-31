@@ -382,7 +382,6 @@ https://leetcode.cn/problems/climbing-stairs/solution/zhi-xin-hua-shi-pa-lou-ti-
 # 除了这种方式，还有增加步长来递归，变相的减少了重复计算
 # 还有一种方法，在递归的同时，用数组记忆之前得到的结果，也是减少重复计算
 
-
 class Solution:
     @functools.lru_cache(100)  # 缓存装饰器
     def climbStairs(self, n: int) -> int:
