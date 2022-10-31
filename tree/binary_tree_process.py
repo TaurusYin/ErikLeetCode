@@ -338,7 +338,6 @@ def lowestCommonAncestor_BST(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode
         return root
 
 
-
 """
 Input: root = [1,2,3]
 Output: 25
@@ -361,6 +360,74 @@ def sumNumbers(self, root: TreeNode) -> int:
             return dfs(root.left, total) + dfs(root.right, total)
 
     return dfs(root, 0)
+
+
+"""
+1120. 子树的最大平均值
+"""
+
+
+# https://leetcode.cn/problems/maximum-average-subtree/solution/hou-xu-bian-li-ji-lu-lei-jia-zhi-python-p25tr/
+def maximumAverageSubtree(self, root):
+    self.res = -float('inf')
+
+    def recur(root):
+        if not root:
+            return 0, 0
+        ls, ln = recur(root.left)
+        rs, rn = recur(root.right)
+
+        self.res = max(self.res, 1.0 * (ls + rs + root.val) / (ln + rn + 1))
+
+        return ls + rs + root.val, ln + rn + 1
+
+    recur(root)
+    return self.res
+
+
+# Python program to evaluate expression tree
+# Class to represent the nodes of syntax tree
+"""
+Expression Tree
+https://www.geeksforgeeks.org/evaluation-of-expression-tree/
+"""
+class node:
+    def __init__(self, value):
+        self.left = None
+        self.data = value
+        self.right = None
+
+
+# This function receives a node of the syntax tree
+# and recursively evaluate it
+
+def evaluateExpressionTree(root):
+    # empty tree
+    if root is None:
+        return 0
+
+    # leaf node
+    if root.left is None and root.right is None:
+        return int(root.data)
+
+    # evaluate left tree
+    left_sum = evaluateExpressionTree(root.left)
+
+    # evaluate right tree
+    right_sum = evaluateExpressionTree(root.right)
+
+    # check which operation to apply
+    if root.data == '+':
+        return left_sum + right_sum
+
+    elif root.data == '-':
+        return left_sum - right_sum
+
+    elif root.data == '*':
+        return left_sum * right_sum
+
+    else:
+        return left_sum // right_sum
 
 
 """
