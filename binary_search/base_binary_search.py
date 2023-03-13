@@ -85,6 +85,7 @@ mid 的取值以及区间的选取不同：某个区间可能包含 mid 的值�
         return left
 
     """
+    34. 在排序数组中查找元素的第一个和最后一个位置
     https://leetcode.cn/problems/find-first-and-last-position-of-element-in-sorted-array/solution/by-huan-huan-20-3ein/
     给你一个按照非递减顺序排列的整数数组 nums，和一个目标值 target。请你找出给定目标值在数组中的开始位置和结束位置。
     在排序数组中查找元素的第一个和最后一个位置
@@ -163,6 +164,7 @@ def findPeakElement(self, nums: List[int]) -> int:
             left = mid + 1
     return left
 
+
 """
 https://leetcode.cn/problems/squares-of-a-sorted-array/solution/dai-ma-sui-xiang-lu-shu-zu-ti-mu-zong-ji-1rtz/
 双指针法
@@ -172,6 +174,8 @@ https://leetcode.cn/problems/squares-of-a-sorted-array/solution/dai-ma-sui-xiang
 定义一个新数组result，和A数组一样的大小，让k指向result数组终止位置
 时间复杂度为O(n)，相对于暴力排序的解法O(n + nlogn)还是提升不少的
 """
+
+
 def sortedSquares(self, nums: List[int]) -> List[int]:
     n = len(nums)
     i, j, k = 0, n - 1, n - 1
@@ -187,6 +191,34 @@ def sortedSquares(self, nums: List[int]) -> List[int]:
             j -= 1
         k -= 1
     return ans
+
+
+"""
+278. 第一个错误的版本
+输入：n = 5, bad = 4
+输出：4
+解释：
+调用 isBadVersion(3) -> false 
+调用 isBadVersion(5) -> true 
+调用 isBadVersion(4) -> true
+所以，4 是第一个错误的版本。
+链接：https://leetcode.cn/problems/first-bad-version
+"""
+
+
+def firstBadVersion(self, n: int) -> int:
+    left, right = 1, n
+    while left <= right:
+        # 向下取整除法计算中点 m
+        mid = (left + right) // 2
+        # 若 m 是错误版本，则最后一个正确版本一定在闭区间 [i, m - 1]
+        if isBadVersion(mid):
+            right = mid - 1
+        # 若 m 是正确版本，则首个错误版本一定在闭区间 [m + 1, j]
+        else:
+            left = mid + 1
+    # i 指向首个错误版本，j 指向最后一个正确版本
+    return left
 
 
 if __name__ == '__main__':

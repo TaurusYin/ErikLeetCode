@@ -1,6 +1,33 @@
 from typing import List
 
 
+def flatten_and_sort(arr):
+    if len(arr) <= 1:
+        return arr[0] if arr else []
+    mid = len(arr) // 2
+    left = flatten_and_sort(arr[:mid])
+    right = flatten_and_sort(arr[mid:])
+    return merge(left, right)
+
+def merge(left, right):
+    result = []
+    i, j = 0, 0
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+    result.extend(left[i:])
+    result.extend(right[j:])
+    return result
+
+arr = [[1, 3, 5], [2, 4, 6]]
+result = flatten_and_sort(arr)
+print(result)  # [1, 2, 3, 4, 5, 6]
+
+
 def merge_sort(nums, low, high):
     if low == high:
         return

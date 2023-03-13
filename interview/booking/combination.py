@@ -1,4 +1,4 @@
-import math
+from arrangement import number_problem
 from functools import cache
 
 blocks = [
@@ -15,7 +15,7 @@ number_of_guests = 7
 def search(blocks, number_of_guests):
     print(blocks)
     print(number_of_guests)
-    combinations, path, cur_guests, min_price = [], [], 0, math.inf
+    combinations, path, cur_guests, min_price = [], [], 0, number_problem.inf
     # @cache
     def backtrack(blocks, start_index, cur_guests, cur_price):
         nonlocal min_price

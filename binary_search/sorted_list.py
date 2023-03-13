@@ -1,6 +1,13 @@
 
 from sortedcontainers import SortedList
 
+sl = SortedList([7,1,3,3,4,5,3,6])
+print(sl)
+# [1, 3, 3, 3, 4, 5, 6, 7]
+left = sl.bisect_left(3) # index:1 第一个元素的位置
+right = sl.bisect_right(3) # index:4 最后一个元素后一个位置
+print()
+
 
 """
 https://leetcode.cn/problems/count-of-range-sum/solution/327-qu-jian-he-de-ge-shu-by-shikata-akik-hhba/

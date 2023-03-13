@@ -31,7 +31,7 @@ class Node:
     def __init__(self, value: list):
         self.value = value
 
-    def __lt__(self, other:list):
+    def __lt__(self, other: list):
         return self.value[2] > other.value[2]
 
     def __eq__(self, other): return self.value[2] == other.value[2]

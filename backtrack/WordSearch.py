@@ -10,6 +10,8 @@ for w in words: reduce(dict.__getitem__, w + "#", tree)
 print()
 
 
+
+
 class Solution:
     def exist(self, board: List[List[str]], word: str) -> bool:
         def backtrack(pos, start_index):

@@ -419,9 +419,9 @@ class Solution:
 
 class Solution:
     def climbStairs(self, n: int) -> int:
-        import math
+        from arrangement import number_problem
         sqrt5 = 5 ** 0.5
-        fibin = math.pow((1 + sqrt5) / 2, n + 1) - math.pow((1 - sqrt5) / 2, n + 1)
+        fibin = number_problem.pow((1 + sqrt5) / 2, n + 1) - number_problem.pow((1 - sqrt5) / 2, n + 1)
         return int(fibin / sqrt5)
 
 
@@ -571,6 +571,64 @@ class Solution:
             for j in range(target, num - 1, -1):
                 dp[j] = dp[j] + dp[j - num]
         return dp[-1]
+
+
+
+
+"""
+Michael喜欢滑雪百这并不奇怪， 因为滑雪的确很刺激。可是为了获得速度，滑的区域必须向下倾斜，而且当你滑到坡底，你不得不再次走上坡或者等待升降机来载你。Michael想知道载一个区域中最长的滑坡。区域由一个二维数组给出。数组的每个数字代表点的高度。下面是一个例子
+1 2 3 4 5
+16 17 18 19 6
+15 24 25 20 7
+14 23 22 21 8
+13 12 11 10 9
+
+一个人可以从某个点滑向上下左右相邻四个点之一，当且仅当高度减小。在上面的例子中，一条可滑行的滑坡为24-17-16-1。当然25-24-23-…-3-2-1更长。事实上，这是最长的一条。
+输入
+输入的第一行表示区域的行数R和列数C(1 <= R,C <= 100)。下面是R行，每行有C个整数，代表高度h，0<=h<=10000。
+输出
+输出最长区域的长度。
+"""
+n, m = map(int, input().split())
+s = []
+s.append(list(0 for i in range(m + 1)))
+for i in range(1, n + 1):
+    temp = [0]
+    temp.extend(list(map(int, input().split())))
+    s.append(temp)
+
+dx = [0, 1, 0, -1]#水平方向上，上，右，下，左
+dy = [1, 0, -1, 0]#垂直方向上，上，右，下，左
+
+f = [[1 for i in range(m + 1)] for j in range(n + 1)]
+
+
+def dp(i, j):
+    # 写个DP函数是用来表示(i,j)位置出发，最远的滑雪距离
+    if f[i][j] > 1:
+        return f[i][j]
+
+    for k in range(4):
+        #这样就可以写出这个(i,j)点，往上，右，下，左四个方向上移动
+        x = i + dx[k]
+        y = j + dy[k]
+        if x >= 1 and x <= n and y >= 1 and y <= m:
+            #这个判断保证不会滑出边界
+            if s[i][j] > s[x][y]:
+                #滑雪只能从高到低
+                f[i][j] = max(f[i][j], dp(x, y) + 1)
+
+
+    return f[i][j]
+
+
+ans = 0
+for i in range(1, n + 1):
+    for j in range(1, m + 1):
+        #遍历所有的出发点
+        ans = max(dp(i, j), ans)
+
+print(ans)
 
 
 

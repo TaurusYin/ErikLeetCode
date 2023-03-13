@@ -17,6 +17,7 @@ class RandomizedSet:
         self.nums.append(val)
         return True
 
+
     # 交换要移除的元素到末尾
     # 然后pop掉
     # 这里需要注意，除了在nums进行交换，还需要修改原数组中末尾元素在valToIndex的值（因为原末尾元素被交换到val所在的位置了）

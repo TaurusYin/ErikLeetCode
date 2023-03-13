@@ -30,7 +30,6 @@ def find_largest_recursion(nums):
     :param nums:
     :return:
     """
-    @CommonDecorator().info()
     def find_max(nums, max_value):
         # print(locals())
         if not nums:
