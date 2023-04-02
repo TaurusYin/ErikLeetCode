@@ -56,19 +56,29 @@ Copy code
 
 
 def max_transaction_rate(currencies, table, target, currencyAtHand):
+    # 创建一个字典，用于将货币名称映射到其索引，方便使用
     names = {currency: i for i, currency in enumerate(currencies)}
+    # 创建一个 memo 数组来存储计算过的最大汇率
     memo = [[0] * len(currencies) for _ in range(len(currencies))]
+    # 将起始货币的最大汇率设置为 memo[1][i]
     current = names[currencyAtHand]
     for i in range(len(currencies)):
         memo[1][i] = table[current][i]
+    # 用一个集合来追踪已经交换的货币，避免重复交换
     exchanged = set([current])
+    # 获取目标货币的索引
     targetCurr = names[target]
+    # 计算每个 k 步的最大汇率，k 从 2 到 n-1，n 为货币数量
     for j in range(2, len(table)):
         for i in range(len(table)):
             if i not in exchanged:
+                # 尝试将货币 i 添加到交换链路中
                 exchanged.add(i)
+                # 计算当前 k 步的最大汇率
                 memo[j][i] = max(memo[j - 1][i], memo[j - 1][current] * table[current][i])
+                # 将货币 i 从交换链路中删除
                 exchanged.remove(i)
+    # 返回最终的最大汇率
     return memo[len(table) - 1][targetCurr]
 
 
