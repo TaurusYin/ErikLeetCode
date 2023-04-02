@@ -1,6 +1,7 @@
 import collections
 from typing import List
 
+
 """
 Union-Find 算法的复杂度可以这样分析：构造函数初始化数据结构需要 O(N) 的时间和空间复杂度；连通两个节点 union、判断两个节点的连通性 connected、计算连通分量 count 所需的时间复杂度均为 O(1)。
 到这里，相信你已经掌握了 Union-Find 算法的核心逻辑，总结一下我们优化算法的过程：
