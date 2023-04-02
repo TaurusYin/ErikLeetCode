@@ -1,0 +1,30 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: translator-deployment
+spec:
+  selector:
+    matchLabels:
+      app: translator
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: translator
+    spec:
+      # hostNetwork: true
+      containers:
+      - name: translator
+        image: ensalty/ml-assignment:latest
+        ports:
+        - containerPort: 9527
+          targetPort: 9527
+        - containerPort: 8265
+          targetPort: 8265
+        resources:
+          requests:
+            cpu: "4"
+            memory: "8G"
+
+

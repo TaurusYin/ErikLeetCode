@@ -1,0 +1,10 @@
+apiVersion: apps/v1
+kind: Service
+metadata:
+  name: translator
+spec:
+  type: ClusterIP
+  ports:
+    - port: 9527
+  selector:
+    app: translator
