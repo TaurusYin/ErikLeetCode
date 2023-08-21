@@ -36,6 +36,17 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/aimat/leetcode/editor/cn/[1275]Find Winner on a Tic Tac Toe Game.py">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/aimat/leetcode/editor/cn/doc/content/[1275]Find Winner on a Tic Tac Toe Game.md" />
+              <option name="frontendQuestionId" value="leetcode.cn1275" />
+              <option name="host" value="leetcode.cn" />
+              <option name="path" value="$PROJECT_DIR$/aimat/leetcode/editor/cn/[1275]Find Winner on a Tic Tac Toe Game.py" />
+              <option name="titleSlug" value="find-winner-on-a-tic-tac-toe-game" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/aimat/leetcode/editor/cn/[1462]Course Schedule IV.py">
           <value>
             <LeetcodeEditor>
@@ -146,6 +157,28 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/aimat/leetcode/editor/cn/[236]Lowest Common Ancestor of a Binary Tree.py">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/aimat/leetcode/editor/cn/doc/content/[236]Lowest Common Ancestor of a Binary Tree.md" />
+              <option name="frontendQuestionId" value="leetcode.cn236" />
+              <option name="host" value="leetcode.cn" />
+              <option name="path" value="$PROJECT_DIR$/aimat/leetcode/editor/cn/[236]Lowest Common Ancestor of a Binary Tree.py" />
+              <option name="titleSlug" value="lowest-common-ancestor-of-a-binary-tree" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/aimat/leetcode/editor/cn/[239]Sliding Window Maximum.py">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/aimat/leetcode/editor/cn/doc/content/[239]Sliding Window Maximum.md" />
+              <option name="frontendQuestionId" value="leetcode.cn239" />
+              <option name="host" value="leetcode.cn" />
+              <option name="path" value="$PROJECT_DIR$/aimat/leetcode/editor/cn/[239]Sliding Window Maximum.py" />
+              <option name="titleSlug" value="sliding-window-maximum" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/aimat/leetcode/editor/cn/[2454]Next Greater Element IV.py">
           <value>
             <LeetcodeEditor>
@@ -211,6 +244,17 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/aimat/leetcode/editor/cn/[39]Combination Sum.py">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/aimat/leetcode/editor/cn/doc/content/[39]Combination Sum.md" />
+              <option name="frontendQuestionId" value="leetcode.cn39" />
+              <option name="host" value="leetcode.cn" />
+              <option name="path" value="$PROJECT_DIR$/aimat/leetcode/editor/cn/[39]Combination Sum.py" />
+              <option name="titleSlug" value="combination-sum" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/aimat/leetcode/editor/cn/[417]Pacific Atlantic Water Flow.py">
           <value>
             <LeetcodeEditor>
@@ -241,6 +285,28 @@
               <option name="host" value="leetcode.cn" />
               <option name="path" value="$PROJECT_DIR$/aimat/leetcode/editor/cn/[463]Island Perimeter.py" />
               <option name="titleSlug" value="island-perimeter" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/aimat/leetcode/editor/cn/[46]Permutations.py">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/aimat/leetcode/editor/cn/doc/content/[46]Permutations.md" />
+              <option name="frontendQuestionId" value="leetcode.cn46" />
+              <option name="host" value="leetcode.cn" />
+              <option name="path" value="$PROJECT_DIR$/aimat/leetcode/editor/cn/[46]Permutations.py" />
+              <option name="titleSlug" value="permutations" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/aimat/leetcode/editor/cn/[47]Permutations II.py">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/aimat/leetcode/editor/cn/doc/content/[47]Permutations II.md" />
+              <option name="frontendQuestionId" value="leetcode.cn47" />
+              <option name="host" value="leetcode.cn" />
+              <option name="path" value="$PROJECT_DIR$/aimat/leetcode/editor/cn/[47]Permutations II.py" />
+              <option name="titleSlug" value="permutations-ii" />
             </LeetcodeEditor>
           </value>
         </entry>
@@ -354,6 +420,17 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/aimat/leetcode/editor/cn/[77]Combinations.py">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/aimat/leetcode/editor/cn/doc/content/[77]Combinations.md" />
+              <option name="frontendQuestionId" value="leetcode.cn77" />
+              <option name="host" value="leetcode.cn" />
+              <option name="path" value="$PROJECT_DIR$/aimat/leetcode/editor/cn/[77]Combinations.py" />
+              <option name="titleSlug" value="combinations" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/aimat/leetcode/editor/cn/[783]Minimum Distance Between BST Nodes.py">
           <value>
             <LeetcodeEditor>
@@ -365,6 +442,17 @@
             </LeetcodeEditor>
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/aimat/leetcode/editor/cn/[78]Subsets.py">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/aimat/leetcode/editor/cn/doc/content/[78]Subsets.md" />
+              <option name="frontendQuestionId" value="leetcode.cn78" />
+              <option name="host" value="leetcode.cn" />
+              <option name="path" value="$PROJECT_DIR$/aimat/leetcode/editor/cn/[78]Subsets.py" />
+              <option name="titleSlug" value="subsets" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/aimat/leetcode/editor/cn/[875]Koko Eating Bananas.py">
           <value>
             <LeetcodeEditor>
@@ -373,6 +461,17 @@
               <option name="host" value="leetcode.cn" />
               <option name="path" value="$PROJECT_DIR$/aimat/leetcode/editor/cn/[875]Koko Eating Bananas.py" />
               <option name="titleSlug" value="koko-eating-bananas" />
+            </LeetcodeEditor>
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/aimat/leetcode/editor/cn/[90]Subsets II.py">
+          <value>
+            <LeetcodeEditor>
+              <option name="contentPath" value="$PROJECT_DIR$/aimat/leetcode/editor/cn/doc/content/[90]Subsets II.md" />
+              <option name="frontendQuestionId" value="leetcode.cn90" />
+              <option name="host" value="leetcode.cn" />
+              <option name="path" value="$PROJECT_DIR$/aimat/leetcode/editor/cn/[90]Subsets II.py" />
+              <option name="titleSlug" value="subsets-ii" />
             </LeetcodeEditor>
           </value>
         </entry>

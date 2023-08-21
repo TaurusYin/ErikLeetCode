@@ -28,6 +28,8 @@ The output should be :
 1,C,D step 3: build[C, D] for 1 time unit
 2,D,E step 4: build[D, E] for 2 time unit
 1,E  step 5: build[E] for 1 time unit
+
+他们家老生常谈的build task scheduler。要注意dependency graph存在环的情况，需要先判环
 """
 
 import unittest

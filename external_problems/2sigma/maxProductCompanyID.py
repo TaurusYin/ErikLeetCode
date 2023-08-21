@@ -31,6 +31,7 @@ class UnionFind:
     def __init__(self, friends_ids):
         # 根据传入的 friends_ids 可迭代集合，创建一个字典。初始时，每个朋友 ID 作为它自己的根节点，表示它们各自独立，尚未与其他朋友 ID 建立连接。
         self.root = {friend_id: friend_id for friend_id in friends_ids}
+        # 它根据传入的 friends_ids 可迭代集合，创建一个字典，将每个朋友 ID 的分组大小初始化为 1。这是因为在初始时，每个朋友 ID 都是独立的，分组只包含它们自己，所以分组大小为 1。
         self.size = {friend_id: 1 for friend_id in friends_ids}
         self.part = len(friends_ids)  # 联通分量个数
 
