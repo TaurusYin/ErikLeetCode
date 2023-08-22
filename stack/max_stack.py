@@ -121,7 +121,6 @@ class MaxStack:
         item = heapq.heappop(self.heap)
         self.popped_set.add(item) #标记堆中pop的元素
         return -item[0]
-
     # 每次stack操作时先清空stack里标记删除的元素
     def clear_pop_in_stack(self):
         while self.stack and self.stack[-1] in self.popped_set:
